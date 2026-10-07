@@ -243,7 +243,7 @@ export const SceneEyes: React.FC<{from: number; to: number}> = ({from, to}) => {
 };
 
 /* -------------------------------------------------------------- 7. comment MANAGE */
-export const SceneCTA: React.FC<{from: number; to: number; word?: string; typeAt?: number; postIn?: number; headline?: string}> = ({from, to, word = "MANAGE", typeAt = 0.7, postIn = 1.55, headline}) => {
+export const SceneCTA: React.FC<{from: number; to: number; word?: string; typeAt?: number; postIn?: number; headline?: string; labels?: boolean; dark?: boolean}> = ({from, to, word = "MANAGE", typeAt = 0.7, postIn = 1.55, headline, labels = true, dark = false}) => {
   const frame = useCurrentFrame();
   const t = frame / FPS;
   const lt = Math.max(0, t - from);
@@ -306,7 +306,7 @@ export const SceneCTA: React.FC<{from: number; to: number; word?: string; typeAt
   const taps = [focusAt, postAt - 0.05].map((tt) => clamp01((t - tt) / 0.5));
   return (
     <>
-      <Stage>
+      <Stage dark={dark} s={dark ? 1.3 : 1}>
         <group position={[0, lerp(-1.8, 0.12, enter), 0]} rotation={[0.05, Math.sin(lt * 0.9) * 0.22 - 0.12, Math.sin(lt * 0.7) * 0.02]} scale={1.05}>
           <Phone screen={screen} />
           {taps.map((k, i) =>
@@ -319,11 +319,11 @@ export const SceneCTA: React.FC<{from: number; to: number; word?: string; typeAt
           )}
         </group>
       </Stage>
-      {headline ? <Label y={LABEL_Y - 110} at={from + 0.1} to={to} bg={C.yellow} color="#0B0B0F" size={60} rot={-1}>{headline}</Label> : null}
-      <Label y={LABEL_Y} at={from + (headline ? 0.2 : 0.1)} to={to} size={72}>
+      {labels && headline ? <Label y={LABEL_Y - 110} at={from + 0.1} to={to} bg={C.yellow} color="#0B0B0F" size={60} rot={-1}>{headline}</Label> : null}
+      {labels ? <Label y={LABEL_Y} at={from + (headline ? 0.2 : 0.1)} to={to} size={72}>
         Comment <span style={{color: C.yellow}}>'{word}'</span>
         <span style={{display: "inline-block", width: 8, height: "0.8em", background: C.yellow, marginLeft: 12, verticalAlign: "-0.08em", opacity: Math.floor(t * 2) % 2 ? 0 : 1}} />
-      </Label>
+      </Label> : null}
       {void FONT}
     </>
   );

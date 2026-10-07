@@ -3,6 +3,7 @@ import fs from "node:fs";
 
 Config.setVideoImageFormat("jpeg");
 Config.setOverwriteOutput(true);
+Config.setDelayRenderTimeoutInMilliseconds(240000);
 Config.setCodec("h264");
 Config.setChromiumOpenGlRenderer("swangle");
 Config.setCrf(16);

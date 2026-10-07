@@ -1,6 +1,5 @@
 import React from "react";
 import {random, useCurrentFrame} from "remotion";
-import {Label} from "../collage";
 import {C, FPS} from "../theme";
 import {clamp01, usePop} from "../util";
 import {AlarmClock, Coin, CrumpledPaper, Laptop, Lightbulb, LoopArrows, Phone, RBox, Text3D} from "./objects";
@@ -11,6 +10,8 @@ import {makeTex} from "./tex";
 const lerp = (a: number, b: number, k: number) => a + (b - a) * k;
 const LABEL_Y = 985;
 const useLocal = (from: number) => Math.max(0, useCurrentFrame() / FPS - from);
+export type StageMode = {inset?: boolean};
+const stageProps = (inset: boolean | undefined, full: {s?: number} = {}) => (inset ? {w: 900, h: 440, z: 2.4, camY: 0.32, dark: true, s: 1} : {dark: true, ...full});
 const CASUAL = {shirt: "#e9ecf2", pants: "#23262e", shoes: "#14110f", prop: "none" as const, hair: "#120d09"};
 
 /** Chat-window texture. mode: "typing" grows the prompt bubble, "wrong" shows a bad answer with a red cross. */
@@ -56,7 +57,7 @@ const chatTex = (progress: number, mode: "typing" | "wrong", t: number) =>
   });
 
 /* ---------- the hard way: stressed at the laptop, crumpled attempts piling up */
-export const SceneHardWay: React.FC<{from: number; to: number}> = ({from, to}) => {
+export const SceneHardWay: React.FC<{from: number; to: number; inset?: boolean}> = ({from, to, inset}) => {
   const t = useLocal(from);
   const inA = usePop(from, 13, 110);
   const papers = Array.from({length: 9}, (_, i) => {
@@ -67,7 +68,7 @@ export const SceneHardWay: React.FC<{from: number; to: number}> = ({from, to}) =
   });
   return (
     <>
-      <Stage s={1.12}>
+      <Stage {...stageProps(inset, {s: 1.12})}>
         <Person look={CASUAL} pose={{t, look: 0.2, nod: 0.12, armL: [1.2, 0.55, 2.3], armR: [1.2, 0.55, 2.3]}} position={[lerp(-2, -0.55, inA), -0.75, -0.1]} scale={0.98} />
         <RBox size={[0.7, 0.34, 0.42]} r={0.02} position={[-0.55, -0.58, 0.55]}><meshStandardMaterial color="#8a6a45" roughness={0.6} /></RBox>
         <group position={[-0.55, -0.4, 0.55]} scale={0.46}><Laptop /></group>
@@ -75,31 +76,29 @@ export const SceneHardWay: React.FC<{from: number; to: number}> = ({from, to}) =
           <group key={p.i} position={[p.x + 0.35, p.y, p.z]} rotation={[p.i, p.i * 2, 0]}><CrumpledPaper seed={p.i + 1} /></group>
         ))}
       </Stage>
-      <Label y={LABEL_Y} at={from + 0.2} to={to} size={72}>The hard way</Label>
     </>
   );
 };
 
 /* ---------- typing a prompt / wrong output */
-export const SceneChat: React.FC<{from: number; to: number; mode: "typing" | "wrong"; label: string; color?: string}> = ({from, to, mode, label, color}) => {
+export const SceneChat: React.FC<{from: number; to: number; mode: "typing" | "wrong"; inset?: boolean}> = ({from, to, mode, inset}) => {
   const t = useLocal(from);
   const inA = usePop(from, 13, 110);
   const screen = chatTex(clamp01((t - 0.3) / 1.6), mode, t);
   const shake = mode === "wrong" && t > 0.25 && t < 0.7 ? Math.sin(t * 70) * 0.03 : 0;
   return (
     <>
-      <Stage>
-        <group position={[shake, lerp(-1.6, -0.3, inA), 0.2]} rotation={[0.12, Math.sin(t * 0.8) * 0.12 - 0.08, 0]} scale={1.85}>
+      <Stage {...stageProps(inset)}>
+        <group position={[shake, lerp(-1.6, inset ? -0.25 : -0.3, inA), 0.2]} rotation={[0.12, Math.sin(t * 0.8) * 0.12 - 0.08, 0]} scale={inset ? 1.9 : 1.85}>
           <Laptop screen={screen} />
         </group>
       </Stage>
-      <Label y={LABEL_Y} at={from + 0.25} to={to} bg={color ?? "#0B0B0F"} size={76} rot={color ? -1 : 0}>{label}</Label>
     </>
   );
 };
 
 /* ---------- again and again */
-export const SceneLoop: React.FC<{from: number; to: number}> = ({from, to}) => {
+export const SceneLoop: React.FC<{from: number; to: number; inset?: boolean}> = ({from, to, inset}) => {
   const t = useLocal(from);
   const p = usePop(from, 10, 150);
   const papers = Array.from({length: 12}, (_, i) => {
@@ -108,38 +107,36 @@ export const SceneLoop: React.FC<{from: number; to: number}> = ({from, to}) => {
   });
   return (
     <>
-      <Stage s={1.15}>
+      <Stage {...stageProps(inset, {s: 1.15})}>
         <group position={[0, 0.25, 0.2]} scale={p * 1.35} rotation={[0, Math.sin(t * 1.5) * 0.3, -t * 3]}><LoopArrows /></group>
         {papers.filter((q) => q.on && q.y > -0.7).map((q) => (
           <group key={q.i} position={[q.x, q.y, q.z]} rotation={[q.i + t * 2, q.i * 2, t]}><CrumpledPaper seed={q.i + 3} /></group>
         ))}
       </Stage>
-      <Label y={LABEL_Y} at={from + 0.15} to={to} size={80}>Again &amp; again</Label>
     </>
   );
 };
 
 /* ---------- thirty minutes passed */
-export const SceneThirty: React.FC<{from: number; to: number}> = ({from, to}) => {
+export const SceneThirty: React.FC<{from: number; to: number; inset?: boolean}> = ({from, to, inset}) => {
   const t = useLocal(from);
   const inA = usePop(from, 12, 130);
   const inB = usePop(from + 0.35, 9, 200);
   return (
     <>
-      <Stage s={0.95}>
+      <Stage {...stageProps(inset, {s: 0.95})}>
         <group position={[-0.5, lerp(-1.5, 0.1, inA), 0.3]} scale={0.95}><AlarmClock t={t * 2.4} /></group>
         <group position={[0.7, 0.35, 0]} scale={inB * 0.9} rotation={[0, Math.sin(t * 2) * 0.35, 0]}>
           <Text3D text="30" size={0.9} />
           <group position={[0, -0.85, 0]}><Text3D text="MIN" size={0.5} color="#F26A1B" /></group>
         </group>
       </Stage>
-      <Label y={LABEL_Y} at={from + 0.25} to={to} bg="#D6362B" size={76} rot={-1}>30 minutes gone</Label>
     </>
   );
 };
 
 /* ---------- others generating apps */
-export const SceneApps: React.FC<{from: number; to: number}> = ({from, to}) => {
+export const SceneApps: React.FC<{from: number; to: number; inset?: boolean}> = ({from, to, inset}) => {
   const t = useLocal(from);
   const inA = usePop(from, 12, 130);
   const n = Math.min(12, Math.floor(t * 4.5));
@@ -165,7 +162,7 @@ export const SceneApps: React.FC<{from: number; to: number}> = ({from, to}) => {
   });
   return (
     <>
-      <Stage s={1.1}>
+      <Stage {...stageProps(inset, {s: 1.1})}>
         <group position={[-0.35, lerp(-1.7, 0.1, inA), 0]} rotation={[0.04, 0.3 + Math.sin(t) * 0.12, 0]} scale={1.05}><Phone screen={screen} /></group>
         {Array.from({length: 4}, (_, i) => {
           const a = t * 1.6 + (i * Math.PI) / 2;
@@ -177,19 +174,18 @@ export const SceneApps: React.FC<{from: number; to: number}> = ({from, to}) => {
           );
         })}
       </Stage>
-      <Label y={LABEL_Y} at={from + 0.2} to={to} size={66}>Others are generating</Label>
     </>
   );
 };
 
 /* ---------- business ideas */
-export const SceneIdeas: React.FC<{from: number; to: number}> = ({from, to}) => {
+export const SceneIdeas: React.FC<{from: number; to: number; inset?: boolean}> = ({from, to, inset}) => {
   const t = useLocal(from);
   const inA = usePop(from, 10, 150);
   const glow = 0.5 + 0.5 * Math.sin(t * 6);
   return (
     <>
-      <Stage s={1.0}>
+      <Stage {...stageProps(inset, {s: 1.0})}>
         <group position={[0, 0.25, 0]} scale={inA * 1.9} rotation={[0, Math.sin(t * 1.3) * 0.4, 0]}><Lightbulb glow={glow} /></group>
         {Array.from({length: 7}, (_, i) => {
           const k = (t * 0.6 + i / 7) % 1;
@@ -198,7 +194,6 @@ export const SceneIdeas: React.FC<{from: number; to: number}> = ({from, to}) => 
           );
         })}
       </Stage>
-      <Label y={LABEL_Y} at={from + 0.1} to={to} bg={C.yellow} color="#0B0B0F" size={66} rot={-1}>Apps &amp; business ideas</Label>
     </>
   );
 };
