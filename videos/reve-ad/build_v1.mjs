@@ -32,20 +32,17 @@ const CAPS = [
 const LIGHT = [[6.5, 16.0], [25.7, 29.6]];
 const capHtml = CAPS.map((c, i) => {
   const words = c[2].split(" ");
+  // merge words so *two word accents* stay together: accent marker toggles per word group
   let acc = false;
-  const segs = []; // {a, words[]}
+  const spans = [];
   for (const w of words) {
     let t = w, a = acc;
     if (t.startsWith("*")) { acc = true; a = true; t = t.slice(1); }
     if (/\*[,.!?]?$/.test(t)) { acc = false; t = t.replace("*", ""); }
-    if (!segs.length || segs[segs.length - 1].a !== a) segs.push({ a, words: [] });
-    segs[segs.length - 1].words.push(t);
+    spans.push(`<span class="w${a ? " a" : ""}">${t}</span>`);
   }
-  const hasKw = segs.some(g => g.a);
-  const blocks = segs.map(g => `<div class="${g.a ? "kw" : "sup"}">${g.words.map(t => `<span class="w">${t}</span>`).join(" ")}</div>`).join("");
-  const sel = hasKw ? `<div class="sel"><i></i><i></i><i></i><i></i></div>` : "";
   const end = Math.min(c[1] + 0.25, DUR);
-  return `<div id="cap${i}" class="cap clip${LIGHT.some(([a,b])=>c[0]>=a&&c[0]<b)?" light":""}${hasKw ? "" : " plain"}" data-start="${c[0]}" data-duration="${(end - c[0]).toFixed(2)}" data-track-index="9">${sel}${blocks}</div>`;
+  return `<div id="cap${i}" class="cap clip${LIGHT.some(([a,b])=>c[0]>=a&&c[0]<b)?" light":""}" data-start="${c[0]}" data-duration="${(end - c[0]).toFixed(2)}" data-track-index="9">${spans.join(" ")}</div>`;
 }).join("\n      ");
 
 // person windows (source time = timeline time)
@@ -54,7 +51,6 @@ const personHtml = PERSON.map((p, i) =>
   `<video id="p${i}" class="clip person" src="assets/talk.mp4" data-start="${p[0]}" data-duration="${p[1]}" data-media-start="${p[0]}" data-track-index="1" muted playsinline></video>`
 ).join("\n      ");
 
-const heart = '<svg class="heart" viewBox="0 0 64 64"><path d="M32 56C10 40 4 28 4 20 4 12 10 6 18 6c6 0 11 3 14 9 3-6 8-9 14-9 8 0 14 6 14 14 0 8-6 20-28 36z" fill="@@C@@"/></svg>';
 const html = `<!doctype html>
 <html lang="en">
 <head>
@@ -82,25 +78,6 @@ html,body{width:${W}px;height:${H}px;overflow:hidden;background:#000;font-family
 .label{position:absolute;font-weight:800;letter-spacing:.14em;font-size:30px;text-transform:uppercase}
 .card{position:absolute;border-radius:36px;overflow:hidden;box-shadow:0 40px 90px rgba(0,0,0,.35)}
 .pill{position:absolute;padding:16px 34px;border-radius:99px;font-weight:900;font-size:40px;letter-spacing:.04em;text-transform:uppercase}
-
-/* ===== v2 style: neon italic keywords, selection box, stickers ===== */
-.cap{top:1330px;height:440px;flex-direction:column;flex-wrap:nowrap;justify-content:center;align-content:center;align-items:center;gap:0}
-.cap .sup,.cap .kw{display:flex;flex-wrap:wrap;justify-content:center;gap:0 16px;position:relative}
-.cap .sup .w{font-family:Inter,"Helvetica Neue",Arial,sans-serif;font-weight:700;font-size:62px;line-height:1.15;letter-spacing:-.01em;text-transform:none;color:#fff;-webkit-text-stroke:0;text-shadow:0 3px 14px rgba(0,0,0,.55),0 1px 0 rgba(0,0,0,.4)}
-.cap .kw .w{font-family:"Playfair Display",serif;font-style:italic;font-weight:700;font-size:134px;line-height:1.02;letter-spacing:-.02em;text-transform:none;color:#2dff6e;-webkit-text-stroke:0;text-shadow:0 0 34px rgba(45,255,110,.55),0 5px 0 rgba(0,40,10,.55)}
-.cap.plain .sup .w{font-size:74px}
-.cap.light .sup .w{color:#15130f;text-shadow:none}
-.cap.light .kw .w{color:#07803a;text-shadow:none}
-.sel{position:absolute;left:30px;right:30px;top:40px;bottom:40px;border:3px solid #2dff6e;pointer-events:none}
-.sel i{position:absolute;width:20px;height:20px;background:#fff;border:3px solid #2dff6e}
-.sel i:nth-child(1){left:-12px;top:-12px}.sel i:nth-child(2){right:-12px;top:-12px}.sel i:nth-child(3){left:-12px;bottom:-12px}.sel i:nth-child(4){right:-12px;bottom:-12px}
-.cap.light .sel{border-color:#07803a}.cap.light .sel i{border-color:#07803a}
-#whoosh{left:0;top:0;width:${W}px;height:${H}px;z-index:60;opacity:0;pointer-events:none;background:linear-gradient(110deg,#8fd3ff 0%,#e9f7ff 45%,#6aa8ff 100%);filter:blur(26px)}
-.heart{position:absolute;width:76px;height:76px}
-.fx{left:0;top:0;width:${W}px;height:${H}px;z-index:45;overflow:hidden;pointer-events:none}
-.badge{position:absolute;font-weight:800;font-size:34px;border-radius:12px;padding:10px 20px;color:#fff;display:flex;align-items:center;gap:10px}
-#tt{left:44px;top:70px;width:992px;height:1740px;z-index:42;pointer-events:none;border-radius:88px;box-shadow:0 0 0 2400px #fff,0 0 60px 2400px #fff}
-.star{position:absolute}
 </style>
 </head>
 <body>
@@ -221,8 +198,8 @@ html,body{width:${W}px;height:${H}px;overflow:hidden;background:#000;font-family
   </section>
 
   <!-- ===== S8  31.9–33.25  free ===== -->
-  <section id="s8" class="clip scene" data-start="31.9" data-duration="1.35" data-track-index="2" style="background:var(--night)">
-    <div id="s8free" class="abs" style="left:0;top:420px;width:${W}px;text-align:center;font-weight:900;font-size:330px;letter-spacing:-.04em;color:#d7ff3a;transform:rotate(-6deg)">FREE</div>
+  <section id="s8" class="clip scene" data-start="31.9" data-duration="1.35" data-track-index="2" style="background:var(--coral)">
+    <div id="s8free" class="abs" style="left:0;top:420px;width:${W}px;text-align:center;font-weight:900;font-size:330px;letter-spacing:-.04em;color:#fff;transform:rotate(-6deg)">FREE</div>
     <div id="s8dots"></div>
   </section>
 
@@ -231,32 +208,6 @@ html,body{width:${W}px;height:${H}px;overflow:hidden;background:#000;font-family
     <svg width="64" height="64" viewBox="0 0 64 64"><path d="M8 10h48v32H30l-14 12V42H8z" fill="#15130f"/></svg>
     <span style="font-weight:900;font-size:54px;color:#15130f;letter-spacing:.02em;text-transform:uppercase">Comment “Reve”</span>
   </div>
-
-
-  <!-- LIVE badge + floating hearts over the opening shot -->
-  <div id="fxA" class="clip fx" data-start="0" data-duration="1.9" data-track-index="7">
-    <div class="badge" id="liveb" style="left:56px;top:70px;background:#ff2d55"><i style="width:14px;height:14px;border-radius:50%;background:#fff;display:inline-block"></i>LIVE</div>
-    <div class="badge" id="viewb" style="left:210px;top:70px;background:rgba(20,20,24,.72)"><svg width="34" height="34" viewBox="0 0 24 24"><path d="M12 5C6 5 2 12 2 12s4 7 10 7 10-7 10-7-4-7-10-7zm0 11a4 4 0 110-8 4 4 0 010 8z" fill="#fff"/></svg><span id="viewn">339</span></div>
-  </div>
-
-  <!-- TikTok-style phone frame for the closing CTA shot -->
-  <div id="tt" class="clip" data-start="33.25" data-duration="2.75" data-track-index="6"></div>
-  <div id="ttui" class="clip fx" data-start="33.25" data-duration="2.75" data-track-index="7" style="z-index:44">
-    <div class="abs" id="ttrail" style="right:90px;top:760px;width:100px;display:flex;flex-direction:column;align-items:center;gap:40px">
-      <div style="width:96px;height:96px;border-radius:50%;background:linear-gradient(135deg,#6b4dff,#ff4d2e);border:5px solid #fff;position:relative"><i style="position:absolute;left:30px;bottom:-16px;width:36px;height:36px;border-radius:50%;background:#ff2d55;color:#fff;font:900 28px/36px Arial;text-align:center;font-style:normal">+</i></div>
-      <svg width="86" height="86" viewBox="0 0 64 64"><path d="M32 56C10 40 4 28 4 20 4 12 10 6 18 6c6 0 11 3 14 9 3-6 8-9 14-9 8 0 14 6 14 14 0 8-6 20-28 36z" fill="#ff2d55"/></svg>
-      <svg width="86" height="86" viewBox="0 0 64 64"><path d="M8 10h48v34H28L14 56V44H8z" fill="#fff" stroke="#15130f" stroke-width="3" stroke-linejoin="round" opacity=".95"/></svg>
-      <svg width="86" height="86" viewBox="0 0 64 64"><path d="M54 8L8 28l16 6 6 20 8-14 16 8z" fill="#fff" stroke="#15130f" stroke-width="3" stroke-linejoin="round" opacity=".95"/></svg>
-    </div>
-    <div class="abs" style="left:90px;top:1230px;color:#fff;font-weight:800;font-size:40px;text-shadow:0 3px 12px rgba(0,0,0,.6)">@your.handle</div>
-  </div>
-  <div id="fxB" class="clip fx" data-start="33.25" data-duration="2.75" data-track-index="5"></div>
-
-  <!-- blue whoosh used on every cut -->
-  <div id="whoosh" class="clip" data-start="0" data-duration="${DUR}" data-track-index="10"></div>
-
-  <!-- sparkles -->
-  <div id="fxS" class="clip fx" data-start="21.9" data-duration="11.4" data-track-index="4"></div>
 
   <!-- captions -->
   ${capHtml}
@@ -331,34 +282,8 @@ tl.to("#s7ring",{strokeDashoffset:2137,duration:1.8,ease:"power1.inOut"},29.75);
 // S8 free stamp + confetti
 tl.from("#s8free",{scale:2.6,opacity:0,duration:.3,ease:"power4.out"},31.96);
 const dots=document.getElementById("s8dots");
-for(let i=0;i<24;i++){const d=document.createElement("i");const a=i/24*Math.PI*2;d.style.cssText="position:absolute;left:540px;top:760px;width:22px;height:22px;border-radius:50%;background:"+["#fff","#d7ff3a","#ff4d2e"][i%3];dots.appendChild(d);
+for(let i=0;i<24;i++){const d=document.createElement("i");const a=i/24*Math.PI*2;d.style.cssText="position:absolute;left:540px;top:760px;width:22px;height:22px;border-radius:50%;background:"+["#fff","#d7ff3a","#15130f"][i%3];dots.appendChild(d);
 tl.fromTo(d,{x:0,y:0,scale:0},{x:Math.cos(a)*(380+(i%4)*60),y:Math.sin(a)*(380+(i%3)*70),scale:1,duration:.5,ease:"power3.out"},32.0);}
-
-
-// ---- v2 reference-style extras
-const HEART=${JSON.stringify(heart)};
-function spawn(parent,svg,color,x,y,t,dur,rise,size){const w=document.createElement("div");w.className="abs";w.style.cssText="left:"+x+"px;top:"+y+"px;width:"+size+"px;height:"+size+"px";w.innerHTML=svg.split("@@C@@").join(color);parent.appendChild(w);
-  tl.fromTo(w,{y:0,scale:0,opacity:0},{y:-rise,scale:1,opacity:1,duration:dur*.35,ease:"back.out(2)"},t);tl.to(w,{y:-rise*1.5,opacity:0,duration:dur*.65,ease:"power1.in"},t+dur*.35);}
-const hc=["#ff2d55","#ff6b8b","#ff9ab0","#ffb703","#6b4dff"];
-const fxA=document.getElementById("fxA"),fxB=document.getElementById("fxB"),fxS=document.getElementById("fxS");
-for(let i=0;i<9;i++){spawn(fxA,HEART,hc[i%5],720+((i*53)%260),1180-((i*37)%140),0.25+i*0.16,0.9,260+(i%3)*60,54+(i%3)*14);}
-for(let i=0;i<12;i++){spawn(fxB,HEART,hc[(i+2)%5],130+((i*79)%760),1320-((i*41)%120),33.6+i*0.17,1.1,300+(i%4)*50,56+(i%3)*14);}
-tl.from("#liveb",{x:-120,opacity:0,duration:.35,ease:"back.out(2)"},0.1);
-tl.from("#viewb",{x:-120,opacity:0,duration:.35,ease:"back.out(2)"},0.2);
-const vn={v:339};tl.to(vn,{v:1204,duration:1.8,ease:"power1.out",onUpdate(){document.getElementById("viewn").textContent=Math.round(vn.v);}},0);
-tl.from("#tt",{scale:1.15,opacity:0,duration:.35,ease:"power3.out"},33.25);
-tl.from("#ttrail > *",{x:90,opacity:0,duration:.3,stagger:.08,ease:"back.out(2)"},33.5);
-// sparkle stars (4-point) around the reveal and the poster scene
-const STAR='<svg viewBox="0 0 64 64"><path d="M32 2C34 22 42 30 62 32 42 34 34 42 32 62 30 42 22 34 2 32 22 30 30 22 32 2z" fill="@@C@@"/></svg>';
-[[110,300,"#ffe27a",21.9,70],[900,240,"#ffffff",22.1,90],[170,900,"#ff9ab0",22.4,60],[880,860,"#2dff6e",22.3,80],[80,200,"#ffb703",26.0,64],[940,150,"#ff4d2e",26.2,76],[540,60,"#6b4dff",26.4,56]].forEach(([x,y,c,t,sz],k)=>{
-  const w=document.createElement("div");w.className="abs";w.style.cssText="left:"+x+"px;top:"+y+"px;width:"+sz+"px;height:"+sz+"px";w.innerHTML=STAR.split("@@C@@").join(c);fxS.appendChild(w);
-  tl.fromTo(w,{scale:0,rotate:-90,opacity:0},{scale:1,rotate:0,opacity:1,duration:.45,ease:"back.out(2.4)"},t);
-  tl.to(w,{scale:.55,rotate:45,duration:.8,repeat:2,yoyo:true,ease:"sine.inOut"},t+.45);
-  tl.to(w,{opacity:0,duration:.3},t+3.2);});
-// selection box intro on keyword captions
-${CAPS.map((c,i)=>/\*/.test(c[2])?`tl.fromTo("#cap${i} .sel",{scaleX:.55,opacity:0},{scaleX:1,opacity:1,duration:.22,ease:"power3.out"},${c[0]});tl.to("#cap${i} .sel",{opacity:0,duration:.25},${(c[0]+0.7).toFixed(2)});`:"").join("\n")}
-// blue whoosh + pop on each cut
-[1.9,6.5,12.0,16.0,19.6,21.9,25.8,29.6,31.9,33.25].forEach(t=>{tl.set("#whoosh",{x:-400,opacity:0},t-0.08);tl.to("#whoosh",{opacity:.8,x:0,duration:.1,ease:"power2.out"},t-0.06);tl.to("#whoosh",{opacity:0,x:400,duration:.22,ease:"power2.in"},t+0.05);});
 
 window.__timelines["main"] = tl;
 </script>
