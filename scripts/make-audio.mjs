@@ -181,4 +181,5 @@ function slam() { // metallic slam: noise + inharmonic partials
 Object.assign(files, {"tear.wav": tear(), "click.wav": click(), "stamp.wav": stamp(), "shutter.wav": shutter(), "rustle.wav": rustle(), "chime.wav": chime(), "slam.wav": slam()});
 for (const [n, d] of Object.entries(files)) writeWav(n, d, n === "hit.wav" ? 1 : 0.85);
 writeWav("music.wav", music(30), 0.8);
+writeWav("music-long.wav", music(42), 0.8);
 console.log("wrote", Object.keys(files).length + 1, "audio files to", OUT);

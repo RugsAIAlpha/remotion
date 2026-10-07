@@ -243,17 +243,17 @@ export const SceneEyes: React.FC<{from: number; to: number}> = ({from, to}) => {
 };
 
 /* -------------------------------------------------------------- 7. comment MANAGE */
-export const SceneCTA: React.FC<{from: number; to: number}> = ({from, to}) => {
+export const SceneCTA: React.FC<{from: number; to: number; word?: string; typeAt?: number; postIn?: number; headline?: string}> = ({from, to, word = "MANAGE", typeAt = 0.7, postIn = 1.55, headline}) => {
   const frame = useCurrentFrame();
   const t = frame / FPS;
   const lt = Math.max(0, t - from);
   const enter = usePop(from, 13, 110);
-  const typeStart = from + 0.7;
-  const typed = Math.max(0, Math.min(6, Math.floor((t - typeStart) / 0.1) + 1));
-  const text = "MANAGE".slice(0, typed);
-  const postAt = from + 1.55;
+  const typeStart = from + typeAt;
+  const typed = Math.max(0, Math.min(word.length, Math.floor((t - typeStart) / 0.1) + 1));
+  const text = word.slice(0, typed);
+  const postAt = from + postIn;
   const posted = t >= postAt;
-  const focusAt = from + 0.55;
+  const focusAt = from + typeAt - 0.15;
   const screen = makeTex(512, 1024, (c, w, h) => {
     c.fillStyle = "#ffffff";
     c.fillRect(0, 0, w, h);
@@ -277,7 +277,7 @@ export const SceneCTA: React.FC<{from: number; to: number}> = ({from, to}) => {
       c.beginPath(); c.arc(60, 490, 28, 0, 7); c.fill();
       c.fillStyle = "#111";
       c.font = "800 40px Inter, Arial";
-      c.fillText("MANAGE", 110, 502);
+      c.fillText(word, 110, 502);
       c.globalAlpha = 1;
     }
     // input bar
@@ -319,8 +319,9 @@ export const SceneCTA: React.FC<{from: number; to: number}> = ({from, to}) => {
           )}
         </group>
       </Stage>
-      <Label y={LABEL_Y} at={from + 0.1} to={to} size={72}>
-        Comment <span style={{color: C.yellow}}>'MANAGE'</span>
+      {headline ? <Label y={LABEL_Y - 110} at={from + 0.1} to={to} bg={C.yellow} color="#0B0B0F" size={60} rot={-1}>{headline}</Label> : null}
+      <Label y={LABEL_Y} at={from + (headline ? 0.2 : 0.1)} to={to} size={72}>
+        Comment <span style={{color: C.yellow}}>'{word}'</span>
         <span style={{display: "inline-block", width: 8, height: "0.8em", background: C.yellow, marginLeft: 12, verticalAlign: "-0.08em", opacity: Math.floor(t * 2) % 2 ? 0 : 1}} />
       </Label>
       {void FONT}

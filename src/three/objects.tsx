@@ -62,8 +62,8 @@ export const Hardhat: React.FC<{color?: string}> = ({color = "#FFB400"}) => {
 };
 
 /* ------------------------------------------------------------------ laptop */
-export const Laptop: React.FC<{open?: number}> = ({open = 1}) => {
-  const screenTex = useMemo(
+export const Laptop: React.FC<{open?: number; screen?: THREE.Texture}> = ({open = 1, screen}) => {
+  const dashTex = useMemo(
     () =>
       makeTex(1024, 640, (c, w, h) => {
         c.fillStyle = "#0f1b2e";
@@ -117,9 +117,9 @@ export const Laptop: React.FC<{open?: number}> = ({open = 1}) => {
         <RBox size={[1.05, 0.03, 0.7]} r={0.015} position={[0, 0.015, 0.35]}>
           <meshStandardMaterial color="#c9ccd1" metalness={0.95} roughness={0.28} />
         </RBox>
-        <mesh position={[0, 0.032, 0.35]} rotation={[-Math.PI / 2, 0, 0]}>
+        <mesh position={[0, -0.002, 0.35]} rotation={[Math.PI / 2, 0, 0]}>
           <planeGeometry args={[0.98, 0.62]} />
-          <meshStandardMaterial map={screenTex} emissiveMap={screenTex} emissive="#ffffff" emissiveIntensity={0.9} toneMapped={false} />
+          <meshStandardMaterial map={screen ?? dashTex} emissiveMap={screen ?? dashTex} emissive="#ffffff" emissiveIntensity={0.9} toneMapped={false} />
         </mesh>
       </group>
     </group>
@@ -629,4 +629,62 @@ export const Phone: React.FC<{screen: THREE.Texture}> = ({screen}) => (
     </mesh>
     <mesh position={[0, 0.74, 0.046]}><circleGeometry args={[0.02, 24]} /><meshBasicMaterial color="#0a0a0a" /></mesh>
   </group>
+);
+
+/* ------------------------------------------------------------------ extra props */
+export const CrumpledPaper: React.FC<{seed?: number}> = ({seed = 1}) => {
+  const geo = useMemo(() => {
+    const g = new THREE.IcosahedronGeometry(0.13, 2);
+    const p = g.attributes.position;
+    for (let i = 0; i < p.count; i++) {
+      const x = p.getX(i), y = p.getY(i), z = p.getZ(i);
+      const n = 1 + 0.22 * Math.sin(x * 55 + seed) * Math.cos(y * 47 + seed * 2) + 0.15 * Math.sin(z * 61 + seed * 3);
+      p.setXYZ(i, x * n, y * n, z * n);
+    }
+    g.computeVertexNormals();
+    return g;
+  }, [seed]);
+  return (
+    <mesh geometry={geo} castShadow receiveShadow>
+      <meshStandardMaterial color="#f4f1ea" roughness={0.95} flatShading />
+    </mesh>
+  );
+};
+
+/** Orange "refresh" icon: two curved arrows. */
+export const LoopArrows: React.FC = () => {
+  const arc = useMemo(() => new THREE.TorusGeometry(0.55, 0.07, 16, 48, 2.5), []);
+  const head = useMemo(() => new THREE.ConeGeometry(0.17, 0.3, 24), []);
+  const mat = <meshPhysicalMaterial color="#F26A1B" roughness={0.3} clearcoat={1} />;
+  return (
+    <group>
+      {[0, Math.PI].map((r) => (
+        <group key={r} rotation={[0, 0, r]}>
+          <mesh geometry={arc} castShadow>{mat}</mesh>
+          <mesh geometry={head} position={[Math.cos(2.5) * 0.55, Math.sin(2.5) * 0.55, 0]} rotation={[0, 0, 2.5 + Math.PI]} castShadow>{mat}</mesh>
+        </group>
+      ))}
+    </group>
+  );
+};
+
+export const Lightbulb: React.FC<{glow: number}> = ({glow}) => (
+  <group>
+    <mesh position={[0, 0.25, 0]} castShadow>
+      <sphereGeometry args={[0.36, 40, 32]} />
+      <meshPhysicalMaterial color="#fff6d0" emissive="#FFD23F" emissiveIntensity={0.15 + glow * 1.4} roughness={0.08} transparent opacity={0.85} clearcoat={1} />
+    </mesh>
+    <mesh position={[0, -0.12, 0]}><cylinderGeometry args={[0.17, 0.22, 0.24, 24]} /><meshStandardMaterial color="#c9ccd1" metalness={1} roughness={0.3} /></mesh>
+    {[0, 1, 2].map((i) => (
+      <mesh key={i} position={[0, -0.06 - i * 0.05, 0]}><torusGeometry args={[0.19, 0.012, 8, 24]} /><meshStandardMaterial color="#8d9097" metalness={1} roughness={0.4} /></mesh>
+    ))}
+    <pointLight position={[0, 0.25, 0.4]} intensity={glow * 3} color="#ffd23f" distance={4} />
+  </group>
+);
+
+export const Coin: React.FC = () => (
+  <mesh rotation={[Math.PI / 2, 0, 0]} castShadow>
+    <cylinderGeometry args={[0.14, 0.14, 0.035, 36]} />
+    <meshStandardMaterial color="#FFC63A" metalness={0.8} roughness={0.3} emissive="#7a5200" emissiveIntensity={0.4} envMapIntensity={2} />
+  </mesh>
 );

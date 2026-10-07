@@ -5,13 +5,13 @@ import {C, FONT, FPS, s2f} from "./theme";
 import {usePop} from "./util";
 
 /** Back on the speaker: short CTA labels ABOVE his head (never over it) + DM badge beside it. */
-export const EndCTA: React.FC<{at: number; to: number}> = ({at, to}) => {
+export const EndCTA: React.FC<{at: number; to: number; word?: string; second?: string; y1?: number; y2?: number}> = ({at, to, word = "MANAGE", second = "Check your DM", y1 = 350, y2 = 455}) => {
   const badge = usePop(at + 0.2, 8, 240);
   const frame = useCurrentFrame();
   return (
     <>
-      <Label y={350} at={at} to={to} size={70}>Comment <span style={{color: C.yellow}}>'MANAGE'</span></Label>
-      <Label y={455} at={at + 0.3} to={to} bg={C.yellow} color="#0B0B0F" size={64} rot={-1}>Check your DM</Label>
+      <Label y={y1} at={at} to={to} size={70}>Comment <span style={{color: C.yellow}}>'{word}'</span></Label>
+      <Label y={y2} at={at + 0.3} to={to} bg={C.yellow} color="#0B0B0F" size={64} rot={-1}>{second}</Label>
       {frame >= s2f(at + 0.2) ? (
         <div style={{position: "absolute", left: 860, top: 800, transform: `scale(${badge * 0.8})`}}>
           <div style={{width: 170, height: 170, borderRadius: 46, background: C.orange, border: "6px solid #fff", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 18px 30px rgba(0,0,0,.45)"}}>
