@@ -1503,6 +1503,7 @@ export const createBrowserStudioOperations = ({
 		dryRun,
 		compositionFile,
 		compositionId,
+		newCompositionId,
 		metadata,
 		existingCompositionIds,
 	}) => {
@@ -1530,6 +1531,7 @@ export const createBrowserStudioOperations = ({
 				nodes: resolved,
 				compositionFile: resolvedCompositionFile,
 				compositionId,
+				newCompositionId,
 				metadata,
 				existingCompositionIds,
 			};
