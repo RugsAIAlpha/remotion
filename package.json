@@ -11,11 +11,15 @@
     "@fontsource/anton": "^5.3.0",
     "@fontsource/inter": "^5.3.0",
     "@fontsource/playfair-display": "^5.3.0",
+    "@react-three/fiber": "^8.17.10",
     "@remotion/cli": "4.0.280",
     "@remotion/media-utils": "4.0.280",
+    "@remotion/three": "^4.0.280",
+    "@types/three": "^0.160.0",
     "react": "18.3.1",
     "react-dom": "18.3.1",
-    "remotion": "4.0.280"
+    "remotion": "4.0.280",
+    "three": "^0.160.1"
   },
   "devDependencies": {
     "@types/react": "18.3.12",

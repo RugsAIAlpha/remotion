@@ -1,8 +1,8 @@
 import React from "react";
 import {AbsoluteFill, Audio, continueRender, delayRender, interpolate, OffthreadVideo, Sequence, staticFile, useCurrentFrame} from "remotion";
-import {DownArrow} from "./cta";
+import {DownArrow, EndCTA} from "./cta";
 import {Cut} from "./collage";
-import {EndCTA, SceneCTA, SceneCost, SceneEyes, SceneError, SceneJob, SceneNoTime, SceneTime} from "./scenes";
+import {SceneCTA, SceneCost, SceneEyes, SceneError, SceneJob, SceneNoTime, SceneTime} from "./three/Scenes3D";
 import {Subtitles} from "./Subtitles";
 import {C, s2f, TOTAL_FRAMES} from "./theme";
 import {ease} from "./util";

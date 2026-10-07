@@ -4,6 +4,7 @@ import fs from "node:fs";
 Config.setVideoImageFormat("jpeg");
 Config.setOverwriteOutput(true);
 Config.setCodec("h264");
+Config.setChromiumOpenGlRenderer("swangle");
 Config.setCrf(16);
 
 // In the sandbox Remotion cannot download its own Chrome; use the pre-installed headless shell if present.
