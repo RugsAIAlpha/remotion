@@ -38,21 +38,21 @@ export const Subtitles: React.FC = () => {
   const inT = interpolate(frame, [a - 1, a + 3], [0, 1], {extrapolateLeft: "clamp", extrapolateRight: "clamp"});
   return (
     <div style={{position: "absolute", left: 60, right: 60, top: 1455, height: 190, display: "flex", justifyContent: "center", alignItems: "center", opacity: inT, transform: `translateY(${(1 - inT) * 14}px)`}}>
-      <div style={{display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "4px 26px", fontFamily: FONT, fontWeight: 800, fontSize: 62, lineHeight: 1.12, textAlign: "center"}}>
+      <div style={{display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "4px 26px", fontFamily: FONT, fontWeight: 800, fontSize: 56, lineHeight: 1.12, textAlign: "center"}}>
         {words.map((w, i) => {
           const active = i < Math.ceil(prog) && i >= Math.floor(prog) - 0 && prog < words.length;
           const accent = p.accent?.some((x) => clean(x).toLowerCase() === clean(w).toLowerCase());
           const spoken = i < prog;
-          const color = accent ? C.amber : C.white;
+          const color = accent ? C.orange : C.cream;
           return (
             <span
               key={i}
               style={{
                 color,
-                opacity: spoken || active ? 1 : 0.55,
+                opacity: spoken || active ? 1 : 0.6,
                 transform: "none",
                 display: "inline-block",
-                WebkitTextStroke: "10px rgba(8,12,24,.95)",
+                WebkitTextStroke: "9px rgba(14,27,61,.92)",
                 paintOrder: "stroke fill",
                 textShadow: "0 6px 18px rgba(0,0,0,.45)",
               }}
