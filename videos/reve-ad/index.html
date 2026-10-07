@@ -6,363 +6,213 @@
 <title>Reve Ad</title>
 <script src="assets/gsap.min.js"></script>
 <style>
-:root{--ink:#15130f;--cream:#f5efe6;--coral:#ff4d2e;--violet:#6b4dff;--night:#0e0d14;--lime:#d7ff3a}
+:root{--paper:#e9e7de;--ink:#2d2c28;--grey:#7a7971;--coral:#ff5d3a;--night:#16151a}
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{width:1080px;height:1920px;overflow:hidden;background:#000;font-family:Inter,"Helvetica Neue",Arial,sans-serif}
 #root{position:relative;width:1080px;height:1920px;overflow:hidden;background:#000}
 .clip{position:absolute}
 .person{left:0;top:0;width:1080px;height:1920px;object-fit:cover}
-.scene{left:0;top:0;width:1080px;height:1920px;overflow:hidden}
+.scene{left:0;top:0;width:1080px;height:1920px;overflow:hidden;
+  background-color:var(--paper);
+  background-image:linear-gradient(rgba(60,58,50,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(60,58,50,.07) 1px,transparent 1px),radial-gradient(900px 900px at 50% 45%,rgba(255,255,255,.55),rgba(0,0,0,0) 70%);
+  background-size:54px 54px,54px 54px,100% 100%}
+.dark{background-color:var(--night);background-image:linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px);background-size:54px 54px}
 .abs{position:absolute}
-/* captions */
-.cap{left:40px;width:1000px;top:1440px;height:300px;display:flex;flex-wrap:wrap;justify-content:center;align-content:center;gap:6px 18px;text-align:center;z-index:50}
-.w{font-weight:900;font-size:92px;line-height:1.02;letter-spacing:-.02em;color:#fff;text-transform:uppercase;
-   text-shadow:0 4px 0 rgba(0,0,0,.55),0 0 28px rgba(0,0,0,.45);-webkit-text-stroke:2px rgba(0,0,0,.35);display:inline-block}
-.w.a{color:var(--lime)}
-.light .w{color:var(--ink);text-shadow:none;-webkit-text-stroke:0}
-.light .w.a{color:#c92f14}
-/* shared pieces */
-.label{position:absolute;font-weight:800;letter-spacing:.14em;font-size:30px;text-transform:uppercase}
-.card{position:absolute;border-radius:36px;overflow:hidden;box-shadow:0 40px 90px rgba(0,0,0,.35)}
-.pill{position:absolute;padding:16px 34px;border-radius:99px;font-weight:900;font-size:40px;letter-spacing:.04em;text-transform:uppercase}
-
-/* ===== v2 style: neon italic keywords, selection box, stickers ===== */
-.cap{top:1330px;height:440px;flex-direction:column;flex-wrap:nowrap;justify-content:center;align-content:center;align-items:center;gap:0}
-.cap .sup,.cap .kw{display:flex;flex-wrap:wrap;justify-content:center;gap:0 16px;position:relative}
-.cap .sup .w{font-family:Inter,"Helvetica Neue",Arial,sans-serif;font-weight:700;font-size:62px;line-height:1.15;letter-spacing:-.01em;text-transform:none;color:#fff;-webkit-text-stroke:0;text-shadow:0 3px 14px rgba(0,0,0,.55),0 1px 0 rgba(0,0,0,.4)}
-.cap .kw .w{font-family:"Playfair Display",serif;font-style:italic;font-weight:700;font-size:134px;line-height:1.02;letter-spacing:-.02em;text-transform:none;color:#2dff6e;-webkit-text-stroke:0;text-shadow:0 0 34px rgba(45,255,110,.55),0 5px 0 rgba(0,40,10,.55)}
-.cap.plain .sup .w{font-size:74px}
-.cap.light .sup .w{color:#15130f;text-shadow:none}
-.cap.light .kw .w{color:#07803a;text-shadow:none}
-.sel{position:absolute;left:30px;right:30px;top:40px;bottom:40px;border:3px solid #2dff6e;pointer-events:none}
-.sel i{position:absolute;width:20px;height:20px;background:#fff;border:3px solid #2dff6e}
-.sel i:nth-child(1){left:-12px;top:-12px}.sel i:nth-child(2){right:-12px;top:-12px}.sel i:nth-child(3){left:-12px;bottom:-12px}.sel i:nth-child(4){right:-12px;bottom:-12px}
-.cap.light .sel{border-color:#07803a}.cap.light .sel i{border-color:#07803a}
-#whoosh{left:0;top:0;width:1080px;height:1920px;z-index:60;opacity:0;pointer-events:none;background:linear-gradient(110deg,#8fd3ff 0%,#e9f7ff 45%,#6aa8ff 100%);filter:blur(26px)}
-.heart{position:absolute;width:76px;height:76px}
-.fx{left:0;top:0;width:1080px;height:1920px;z-index:45;overflow:hidden;pointer-events:none}
-.badge{position:absolute;font-weight:800;font-size:34px;border-radius:12px;padding:10px 20px;color:#fff;display:flex;align-items:center;gap:10px}
-#tt{left:44px;top:70px;width:992px;height:1740px;z-index:42;pointer-events:none;border-radius:88px;box-shadow:0 0 0 2400px #fff,0 0 60px 2400px #fff}
-.star{position:absolute}
+.cut{position:absolute;filter:drop-shadow(0 26px 26px rgba(48,44,30,.30))}
+.cut svg{display:block;width:100%;height:100%}
+.hair{position:absolute;height:2px;background:rgba(45,44,40,.55);transform-origin:0 50%}
+.cardbox{width:100%;height:100%;border-radius:26px;overflow:hidden;position:relative}
+/* captions: small light line + bold caps keyword */
+.cap{left:60px;width:960px;top:1400px;height:420px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;z-index:50}
+.cap.onp{top:1400px}
+.cap .sup,.cap .kw{display:flex;flex-wrap:wrap;justify-content:center;gap:0 14px}
+.cap .sup .w{font-weight:500;font-size:56px;line-height:1.2;letter-spacing:-.005em;color:#6d6c64}
+.cap .kw .w{font-weight:800;font-size:124px;line-height:1.02;letter-spacing:.015em;text-transform:uppercase;color:#2d2c28}
+.cap.onp .sup .w{color:#fff;text-shadow:0 2px 14px rgba(0,0,0,.6)}
+.cap.onp .kw .w{color:#fff;text-shadow:0 3px 18px rgba(0,0,0,.6)}
+.cap.dk .sup .w{color:#b9b8ae}.cap.dk .kw .w{color:#f4f3ec}
+#flash{left:0;top:0;width:1080px;height:1920px;z-index:60;background:#f5f4ee;opacity:0;pointer-events:none}
 </style>
 </head>
 <body>
 <div id="root" data-composition-id="main" data-start="0" data-duration="36" data-width="1080" data-height="1920">
 
   <audio id="voice" src="assets/voice.m4a" data-start="0" data-duration="36" data-track-index="0"></audio>
+  <video id="p0" class="clip person" src="assets/talk.mp4" data-start="0" data-duration="1.4" data-media-start="0" data-track-index="1" muted playsinline></video>
+  <video id="p1" class="clip person" src="assets/talk.mp4" data-start="19.6" data-duration="1.2" data-media-start="19.6" data-track-index="1" muted playsinline></video>
+  <video id="p2" class="clip person" src="assets/talk.mp4" data-start="34.6" data-duration="1.4" data-media-start="34.6" data-track-index="1" muted playsinline></video>
 
-  <!-- ===== S1  2.0–6.5  "scare your designer" ===== -->
-  <section id="s1" class="clip scene" data-start="1.9" data-duration="4.6" data-track-index="2" style="background:radial-gradient(900px 900px at 50% 40%,#2a2540,#0e0d14 70%)">
-    <svg class="abs" id="s1art" style="left:0;top:0" width="1080" height="1440" viewBox="0 0 1080 1440">
-      <defs><radialGradient id="glow" cx="50%" cy="45%" r="55%"><stop offset="0" stop-color="#7d6bff" stop-opacity=".9"/><stop offset="1" stop-color="#7d6bff" stop-opacity="0"/></radialGradient></defs>
-      <ellipse cx="540" cy="560" rx="520" ry="420" fill="url(#glow)"/>
-      <!-- monitor -->
-      <rect x="170" y="230" width="740" height="470" rx="26" fill="#1a1824" stroke="#3a3650" stroke-width="8"/>
-      <rect x="196" y="256" width="688" height="418" rx="12" fill="#f3f0ff"/>
-      <rect x="226" y="290" width="220" height="26" rx="13" fill="#cfc8ff"/>
-      <rect x="226" y="340" width="628" height="290" rx="14" fill="#fff" stroke="#d9d3ff" stroke-width="4" stroke-dasharray="14 12"/>
-      <rect id="s1cursor" x="520" y="470" width="6" height="52" fill="#15130f"/>
-      <rect x="470" y="700" width="140" height="70" fill="#2a2740"/><rect x="380" y="770" width="320" height="22" rx="11" fill="#3a3650"/>
-      <!-- designer silhouette -->
-      <g id="s1fig"><circle cx="540" cy="1010" r="120" fill="#0a0910"/><path d="M250 1440 C250 1190 360 1120 540 1120 C720 1120 830 1190 830 1440 Z" fill="#0a0910"/></g>
-      <!-- sticky notes -->
-      <g id="s1notes"><rect x="60" y="300" width="130" height="130" fill="#ffd84d" transform="rotate(-8 125 365)"/><rect x="900" y="360" width="130" height="130" fill="#ff8aa1" transform="rotate(7 965 425)"/><rect x="930" y="560" width="110" height="110" fill="#7dffd0" transform="rotate(-5 985 615)"/></g>
+  <!-- S1 1.4–6.5 designer -->
+  <section id="s1" class="clip scene" data-start="1.4" data-duration="5.1" data-track-index="2">
+    <div id="s1m" class="cut" style="left:150px;top:210px;width:780px;height:660px"><svg viewBox="0 0 520 440"><rect x="10" y="10" width="500" height="320" rx="22" fill="#2b2a27"/><rect x="34" y="34" width="452" height="272" rx="10" fill="#f6f5ef"/><rect x="60" y="62" width="150" height="18" rx="9" fill="#cfcdc2"/><rect x="60" y="100" width="400" height="180" rx="10" fill="none" stroke="#bdbaad" stroke-width="3" stroke-dasharray="10 9"/><rect x="236" y="330" width="48" height="60" fill="#2b2a27"/><rect x="150" y="388" width="220" height="30" rx="15" fill="#2b2a27"/></svg></div>
+    <div id="s1p" class="cut" style="left:90px;top:960px;width:560px;height:90px;transform:rotate(-8deg)"><svg viewBox="0 0 520 80"><path d="M40 10h400l60 30-60 30H40z" fill="#f2c94c"/><path d="M440 10l60 30-60 30z" fill="#f3dcc0"/><path d="M482 30l18 10-18 10z" fill="#2b2a27"/><rect x="0" y="10" width="40" height="60" rx="8" fill="#e58a8a"/><rect x="40" y="10" width="14" height="60" fill="#b9b9b2"/></svg></div>
+    <div id="s1a" class="cut" style="left:60px;top:150px;width:170px;height:170px"><svg viewBox="0 0 140 140"><path d="M6 6h128v100l-34 34H6z" fill="#ffd84d"/><path d="M100 140v-34h34z" fill="rgba(0,0,0,.16)"/></svg></div>
+    <div id="s1b" class="cut" style="left:840px;top:120px;width:170px;height:170px"><svg viewBox="0 0 140 140"><path d="M6 6h128v100l-34 34H6z" fill="#ff9ab0"/><path d="M100 140v-34h34z" fill="rgba(0,0,0,.16)"/></svg></div>
+    <div id="s1c" class="cut" style="left:880px;top:880px;width:140px;height:140px"><svg viewBox="0 0 140 140"><path d="M6 6h128v100l-34 34H6z" fill="#9be7c6"/><path d="M100 140v-34h34z" fill="rgba(0,0,0,.16)"/></svg></div>
+    <div id="s1h1" class="hair" style="left:0;top:170px;width:1400px;transform:rotate(14deg)"></div>
+  </section>
+
+  <!-- S2 6.5–12.0 vision -> prompt -->
+  <section id="s2" class="clip scene" data-start="6.5" data-duration="5.5" data-track-index="2">
+    <div id="s2h" class="cut" style="left:250px;top:120px;width:580px;height:710px"><svg viewBox="0 0 520 640"><defs><clipPath id="hc"><path d="M260 20C130 20 50 120 50 250c0 90 40 130 40 200v160h230v-70h70V440c70-50 130-80 130-190C520 120 390 20 260 20z" transform="translate(0,0) scale(.92) translate(20,0)"/></clipPath><linearGradient id="sk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff9a6a"/><stop offset=".6" stop-color="#ff5d7a"/><stop offset="1" stop-color="#6b4dff"/></linearGradient></defs><g clip-path="url(#hc)"><rect width="520" height="640" fill="url(#sk)"/><circle cx="270" cy="210" r="70" fill="#ffe27a"/><path d="M0 400L150 240l110 130 120-170 140 200v240H0z" fill="#2b1650"/></g><path d="M260 20C130 20 50 120 50 250c0 90 40 130 40 200v160h230v-70h70V440c70-50 130-80 130-190C520 120 390 20 260 20z" transform="scale(.92) translate(20,0)" fill="none" stroke="#2b2a27" stroke-width="9"/></svg></div>
+    <div id="s2p" class="cut" style="left:90px;top:860px;width:900px;height:260px"><div class="cardbox" style="background:#fff"><div style="padding:40px 46px"><div style="font-weight:700;font-size:24px;letter-spacing:.16em;color:#9a988d;text-transform:uppercase">Prompt</div><div id="s2type" style="margin-top:20px;font-size:48px;font-weight:600;line-height:1.2;color:#2d2c28;min-height:130px"></div></div></div></div>
+    <div id="s2h1" class="hair" style="left:-100px;top:1000px;width:1400px;transform:rotate(-9deg)"></div>
+  </section>
+
+  <!-- S3 12.0–16.0 head vs result -->
+  <section id="s3" class="clip scene" data-start="12.0" data-duration="4.0" data-track-index="2">
+    <div id="s3a" class="cut" style="left:70px;top:150px;width:440px;height:760px"><div class="cardbox" style="background:linear-gradient(#ff9a6a,#ff5d7a 55%,#6b4dff)"><svg viewBox="0 0 440 760"><circle cx="220" cy="270" r="84" fill="#ffe27a"/><path d="M0 500L120 360l100 110 100-150 120 180v310H0z" fill="#2b1650"/><rect x="60" y="610" width="320" height="30" rx="15" fill="#fff"/></svg></div></div>
+    <div id="s3b" class="cut" style="left:570px;top:150px;width:440px;height:760px"><div class="cardbox" style="background:#a9a79c"><svg viewBox="0 0 440 760"><ellipse cx="240" cy="290" rx="130" ry="64" fill="#7d7b72"/><path d="M0 520q110-80 200 20t240-40v260H0z" fill="#6f6d65"/><text x="36" y="640" font-family="Arial" font-weight="900" font-size="54" fill="#3a3935" transform="rotate(-4 36 640)">COFFE SH0P</text></svg></div></div>
+    <div id="s3l1" class="abs" style="left:70px;top:940px;width:440px;text-align:center;font-weight:700;font-size:28px;letter-spacing:.16em;text-transform:uppercase;color:#6d6c64">In your head</div>
+    <div id="s3l2" class="abs" style="left:570px;top:940px;width:440px;text-align:center;font-weight:700;font-size:28px;letter-spacing:.16em;text-transform:uppercase;color:#6d6c64">What you got</div>
+  </section>
+
+  <!-- S4 16.0–19.6 three problems -->
+  <section id="s4" class="clip scene dark" data-start="16.0" data-duration="3.6" data-track-index="2">
+    <div id="s4a" class="cut" style="left:70px;top:120px;width:940px;height:300px"><div class="cardbox" style="background:#1f1e25"><div style="padding:34px 40px"><div style="font-weight:700;font-size:26px;letter-spacing:.16em;color:#ff7a5c">01 · WRONG COLORS</div><div style="display:flex;margin-top:30px;height:150px"><i style="flex:1;background:#00e5a8"></i><i style="flex:1;background:#ff2bd6"></i><i style="flex:1;background:#fff200"></i><i style="flex:1;background:#2f6bff"></i><i style="flex:1;background:#ff7a00"></i></div></div></div></div>
+    <div id="s4b" class="cut" style="left:70px;top:460px;width:940px;height:300px"><div class="cardbox" style="background:#1f1e25"><div style="padding:34px 40px"><div style="font-weight:700;font-size:26px;letter-spacing:.16em;color:#ff7a5c">02 · BROKEN TEXT</div><div id="s4g" style="margin-top:28px;font-weight:900;font-size:92px;color:#fff;white-space:nowrap">G10B4L C0FFEE</div></div></div></div>
+    <div id="s4c" class="cut" style="left:70px;top:800px;width:940px;height:300px"><div class="cardbox" style="background:#1f1e25"><div style="padding:34px 40px"><div style="font-weight:700;font-size:26px;letter-spacing:.16em;color:#ff7a5c">03 · GENERIC FEEL</div><div style="display:flex;gap:24px;margin-top:30px"><i style="width:260px;height:150px;background:#8b8f96;border-radius:14px"></i><i style="width:260px;height:150px;background:#8b8f96;border-radius:14px"></i><i style="width:260px;height:150px;background:#8b8f96;border-radius:14px"></i></div></div></div></div>
+  </section>
+
+  <!-- S4b 20.8–22.7 settle -->
+  <section id="s4x" class="clip scene" data-start="20.8" data-duration="1.9" data-track-index="2">
+    <div id="s4x1" class="cut" style="left:200px;top:260px;width:680px;height:420px;transform:rotate(-4deg)"><div class="cardbox" style="background:#bdbbb0"><div style="padding:50px;font-weight:800;font-size:90px;color:#85837a">meh.</div></div></div>
+    <div id="s4x2" class="cut" style="left:230px;top:380px;width:680px;height:420px;transform:rotate(3deg)"><div class="cardbox" style="background:#cfcdc3"><div style="padding:50px;font-weight:800;font-size:90px;color:#6f6d65">good enough</div></div></div>
+    <div id="s4x3" class="cut" style="left:700px;top:760px;width:240px;height:240px"><svg viewBox="0 0 140 140"><path d="M6 6h128v100l-34 34H6z" fill="#ffd84d"/><path d="M100 140v-34h34z" fill="rgba(0,0,0,.16)"/></svg></div>
+  </section>
+
+  <!-- S5 22.7–25.8 reveal -->
+  <section id="s5" class="clip scene" data-start="22.7" data-duration="3.1" data-track-index="2">
+    <div id="s5w" class="abs" style="left:0;top:420px;width:1080px;text-align:center;font-weight:900;font-size:300px;letter-spacing:-.05em;color:#2d2c28">Reve</div>
+    <div id="s5s" class="abs" style="left:0;top:760px;width:1080px;text-align:center;font-weight:600;font-size:40px;letter-spacing:.3em;text-transform:uppercase;color:#7a7971">AI image generator</div>
+    <div id="s5l" class="hair" style="left:340px;top:850px;width:400px"></div>
+  </section>
+
+  <!-- S6 25.8–29.6 posters -->
+  <section id="s6" class="clip scene" data-start="25.8" data-duration="3.8" data-track-index="2">
+    <div id="s6a" class="cut" style="left:50px;top:130px;width:460px;height:640px"><div class="cardbox" style="background:linear-gradient(160deg,#ffd9c4,#ff9a6a)"><div style="position:absolute;inset:0"><svg viewBox="0 0 260 520"><ellipse cx="130" cy="492" rx="100" ry="18" fill="rgba(0,0,0,.18)"/><rect x="85" y="150" width="90" height="330" rx="26" fill="#fbfaf6"/><rect x="108" y="90" width="44" height="68" rx="8" fill="#2b2a27"/><rect x="100" y="270" width="60" height="86" rx="8" fill="#ff5d3a"/></svg></div></div></div>
+    <div id="s6b" class="cut" style="left:570px;top:130px;width:460px;height:640px"><div class="cardbox" style="background:#1b1a17"><div style="position:absolute;left:36px;top:70px;font-weight:900;font-size:100px;line-height:.95;color:#fff;letter-spacing:-.03em">FRESH<br>ROAST</div><div style="position:absolute;left:36px;top:300px;font-size:38px;font-weight:600;color:#d7ff3a;line-height:1.3">Small-batch coffee<br>Brewed daily</div></div></div>
+    <div id="s6c" class="cut" style="left:50px;top:820px;width:460px;height:520px"><div class="cardbox" style="background:#fff"><div style="position:absolute;left:36px;top:36px;font-size:56px;font-weight:900;color:#2d2c28">MENU</div><div style="position:absolute;left:36px;top:120px;font-size:38px;font-weight:600;color:#2d2c28;line-height:1.7">Flat white ... 4.5<br>Cold brew ... 5.0<br>Croissant ... 3.5<br>Matcha ... 5.5</div></div></div>
+    <div id="s6d" class="cut" style="left:570px;top:820px;width:460px;height:520px"><div class="cardbox" style="background:linear-gradient(160deg,#6b4dff,#2b1cc4)"><div style="position:absolute;left:36px;top:56px;font-size:32px;font-weight:700;color:#fff;letter-spacing:.18em">A NOVEL</div><div style="position:absolute;left:36px;top:130px;font-size:88px;font-weight:900;line-height:.98;color:#fff">Quiet<br>Light</div><div style="position:absolute;left:36px;bottom:44px;font-size:34px;color:#d7ff3a;font-weight:700">M. Alvarez</div></div></div>
+  </section>
+
+  <!-- S7 29.6–31.9 timer -->
+  <section id="s7" class="clip scene" data-start="29.6" data-duration="2.3" data-track-index="2">
+    <svg class="abs" style="left:150px;top:200px" width="780" height="780" viewBox="0 0 780 780">
+      <circle cx="390" cy="390" r="330" fill="none" stroke="rgba(45,44,40,.14)" stroke-width="26"/>
+      <circle id="s7r" cx="390" cy="390" r="330" fill="none" stroke="#2d2c28" stroke-width="26" stroke-linecap="round" stroke-dasharray="2073" stroke-dashoffset="0" transform="rotate(-90 390 390)"/>
     </svg>
-    <div class="label abs" id="s1tag" style="left:70px;top:120px;color:#cfc8ff">Designer · 9:41 pm</div>
+    <div id="s7n" class="abs" style="left:0;top:470px;width:1080px;text-align:center;font-weight:900;font-size:290px;color:#2d2c28;letter-spacing:-.04em">0:20</div>
+    <div class="abs" style="left:0;top:790px;width:1080px;text-align:center;font-weight:700;font-size:36px;letter-spacing:.3em;color:#7a7971">SECONDS OR LESS</div>
   </section>
 
-  <!-- ===== S2  6.5–12.0  vision → prompt ===== -->
-  <section id="s2" class="clip scene" data-start="6.5" data-duration="5.5" data-track-index="2" style="background:var(--cream)">
-    <svg class="abs" style="left:0;top:0" width="1080" height="1440" viewBox="0 0 1080 1440">
-      <defs>
-        <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff8a5c"/><stop offset=".6" stop-color="#ff4d6d"/><stop offset="1" stop-color="#6b4dff"/></linearGradient>
-        <clipPath id="headclip"><path d="M540 140 C380 140 290 260 290 410 C290 520 340 560 340 640 L340 760 L560 760 L560 690 L640 690 L640 560 C720 500 790 470 790 400 C790 250 700 140 540 140 Z"/></clipPath>
-      </defs>
-      <path d="M540 140 C380 140 290 260 290 410 C290 520 340 560 340 640 L340 760 L560 760 L560 690 L640 690 L640 560 C720 500 790 470 790 400 C790 250 700 140 540 140 Z" fill="none" stroke="#15130f" stroke-width="10"/>
-      <g clip-path="url(#headclip)" id="s2scene" opacity="0">
-        <rect x="280" y="130" width="520" height="640" fill="url(#sky)"/>
-        <circle cx="560" cy="360" r="95" fill="#ffe27a"/>
-        <path d="M280 560 L420 380 L520 500 L640 330 L800 560 L800 770 L280 770Z" fill="#2b1650"/>
-        <path d="M280 640 L440 520 L560 620 L700 500 L800 640 L800 770 L280 770Z" fill="#1a0d33"/>
-      </g>
-      <g id="s2sparks"><circle cx="250" cy="200" r="10" fill="#ff4d2e"/><circle cx="840" cy="170" r="14" fill="#6b4dff"/><circle cx="880" cy="520" r="9" fill="#ff4d2e"/><circle cx="220" cy="520" r="12" fill="#6b4dff"/></g>
-    </svg>
-    <div id="s2prompt" class="abs" style="left:70px;top:880px;width:940px;height:330px;background:#fff;border-radius:34px;box-shadow:0 30px 70px rgba(21,19,15,.22);padding:44px;">
-      <div style="font-size:26px;font-weight:800;letter-spacing:.14em;color:#8a8478;text-transform:uppercase;margin-bottom:22px">Prompt</div>
-      <div id="s2type" style="font-size:52px;font-weight:700;line-height:1.2;color:#15130f;min-height:190px"></div>
-    </div>
+  <!-- S8 31.9–33.25 free -->
+  <section id="s8" class="clip scene" data-start="31.9" data-duration="1.35" data-track-index="2">
+    <div id="s8f" class="abs" style="left:0;top:420px;width:1080px;text-align:center;font-weight:900;font-size:270px;letter-spacing:-.04em;color:#2d2c28;transform:rotate(-5deg)">FREE</div>
+    <div id="s8l" class="hair" style="left:150px;top:760px;width:780px;height:6px;background:#ff5d3a"></div>
   </section>
 
-  <!-- ===== S3  12.0–16.0  mismatch ===== -->
-  <section id="s3" class="clip scene" data-start="12.0" data-duration="4.0" data-track-index="2" style="background:#e9e2d6">
-    <div id="s3a" class="card" style="left:70px;top:150px;width:440px;height:860px;background:linear-gradient(#ff8a5c,#ff4d6d 55%,#6b4dff)">
-      <svg width="440" height="860" viewBox="0 0 440 860"><circle cx="220" cy="300" r="90" fill="#ffe27a"/><path d="M0 560 L120 400 L220 520 L320 380 L440 560 L440 860 L0 860Z" fill="#2b1650"/><rect x="60" y="690" width="320" height="34" rx="17" fill="#fff"/><rect x="110" y="750" width="220" height="22" rx="11" fill="#ffffffaa"/></svg>
-    </div>
-    <div id="s3b" class="card" style="left:570px;top:150px;width:440px;height:860px;background:#9a9a9a;filter:saturate(.2)">
-      <svg width="440" height="860" viewBox="0 0 440 860"><rect width="440" height="860" fill="#a8a39a"/><ellipse cx="240" cy="330" rx="140" ry="70" fill="#7b7870"/><path d="M0 600 Q110 520 200 640 T440 580 L440 860 L0 860Z" fill="#6f6d68"/><text x="40" y="740" font-family="Arial" font-weight="900" font-size="58" fill="#3b3a37" transform="rotate(-4 40 740)">COFFE SH0P</text><text x="40" y="800" font-family="Arial" font-size="30" fill="#4a4945">fr3sh r0ast bl3nd</text></svg>
-    </div>
-    <div class="pill" id="s3la" style="left:70px;top:1050px;background:var(--ink);color:#fff;font-size:34px">In your head</div>
-    <div class="pill" id="s3lb" style="left:570px;top:1050px;background:#7a7468;color:#fff;font-size:34px">What you got</div>
+  <!-- S9 33.25–34.6 comment -->
+  <section id="s9" class="clip scene" data-start="33.25" data-duration="1.35" data-track-index="2">
+    <div id="s9b" class="cut" style="left:250px;top:260px;width:580px;height:500px"><svg viewBox="0 0 300 260"><path d="M20 20h260v170H130l-60 54v-54H20z" fill="#fff" stroke="#2b2a27" stroke-width="8" stroke-linejoin="round"/><circle cx="90" cy="105" r="14" fill="#2b2a27"/><circle cx="150" cy="105" r="14" fill="#2b2a27"/><circle cx="210" cy="105" r="14" fill="#2b2a27"/></svg></div>
+    <div id="s9t" class="abs" style="left:0;top:790px;width:1080px;text-align:center;font-weight:800;font-size:60px;letter-spacing:.16em;color:#2d2c28">@ REVE</div>
   </section>
 
-  <!-- ===== S4  16.0–19.6  wrong colors / broken text / generic ===== -->
-  <section id="s4" class="clip scene" data-start="16.0" data-duration="3.6" data-track-index="2" style="background:#14121b">
-    <div id="s4a" class="card" style="left:70px;top:130px;width:940px;height:330px;background:#1d1a27;box-shadow:none;border:4px solid #ff4d2e">
-      <div class="label" style="left:44px;top:34px;color:#ff4d2e">01 · Wrong colors</div>
-      <div style="position:absolute;left:44px;right:44px;top:110px;height:170px;display:flex;gap:0"><i style="flex:1;background:#00e5a8"></i><i style="flex:1;background:#ff2bd6"></i><i style="flex:1;background:#fff200"></i><i style="flex:1;background:#2f6bff"></i><i style="flex:1;background:#ff7a00"></i></div>
-    </div>
-    <div id="s4b" class="card" style="left:70px;top:500px;width:940px;height:330px;background:#1d1a27;box-shadow:none;border:4px solid #ff4d2e">
-      <div class="label" style="left:44px;top:34px;color:#ff4d2e">02 · Broken text</div>
-      <div id="s4glitch" style="position:absolute;left:44px;top:100px;font-size:96px;white-space:nowrap;font-weight:900;color:#fff;letter-spacing:.02em">G10B4L C0FFEE</div>
-    </div>
-    <div id="s4c" class="card" style="left:70px;top:870px;width:940px;height:330px;background:#1d1a27;box-shadow:none;border:4px solid #ff4d2e">
-      <div class="label" style="left:44px;top:34px;color:#ff4d2e">03 · Generic feel</div>
-      <div style="position:absolute;left:44px;top:110px;display:flex;gap:26px"><i style="width:260px;height:170px;background:#8b8f96;border-radius:14px"></i><i style="width:260px;height:170px;background:#8b8f96;border-radius:14px"></i><i style="width:260px;height:170px;background:#8b8f96;border-radius:14px"></i></div>
-    </div>
-  </section>
-
-  <!-- person windows -->
-  <video id="p0" class="clip person" src="assets/talk.mp4" data-start="0" data-duration="1.9" data-media-start="0" data-track-index="1" muted playsinline></video>
-      <video id="p1" class="clip person" src="assets/talk.mp4" data-start="19.6" data-duration="2.3" data-media-start="19.6" data-track-index="1" muted playsinline></video>
-      <video id="p2" class="clip person" src="assets/talk.mp4" data-start="33.25" data-duration="2.75" data-media-start="33.25" data-track-index="1" muted playsinline></video>
-
-  <!-- ===== S5  21.9–25.8  Reve reveal ===== -->
-  <section id="s5" class="clip scene" data-start="21.9" data-duration="3.9" data-track-index="2" style="background:radial-gradient(1000px 1000px at 50% 45%,#3b2bd9,#12103a 70%)">
-    <div id="s5ring1" class="abs" style="left:190px;top:260px;width:700px;height:700px;border:6px solid #ffffff55;border-radius:50%"></div>
-    <div id="s5ring2" class="abs" style="left:90px;top:160px;width:900px;height:900px;border:4px solid #ffffff22;border-radius:50%"></div>
-    <div id="s5word" class="abs" style="left:0;top:470px;width:1080px;text-align:center;font-weight:900;font-size:260px;letter-spacing:-.05em;color:#fff">Reve</div>
-    <div id="s5sub" class="abs" style="left:0;top:790px;width:1080px;text-align:center;font-weight:700;font-size:48px;letter-spacing:.16em;text-transform:uppercase;color:var(--lime)">AI image generator</div>
-  </section>
-
-  <!-- ===== S6  25.8–29.6  studio visuals + readable text ===== -->
-  <section id="s6" class="clip scene" data-start="25.8" data-duration="3.8" data-track-index="2" style="background:var(--cream)">
-    <div id="s6a" class="card" style="left:60px;top:90px;width:450px;height:640px;background:linear-gradient(160deg,#ffd9c4,#ff8a5c)">
-      <svg width="450" height="640" viewBox="0 0 450 640"><ellipse cx="225" cy="560" rx="150" ry="26" fill="#00000030"/><rect x="170" y="190" width="110" height="330" rx="22" fill="#fff"/><rect x="195" y="130" width="60" height="70" rx="10" fill="#15130f"/><rect x="190" y="290" width="70" height="90" rx="8" fill="#ff4d2e"/></svg>
-    </div>
-    <div id="s6b" class="card" style="left:570px;top:90px;width:450px;height:640px;background:#15130f">
-      <div style="position:absolute;left:36px;top:70px;font-weight:900;font-size:100px;line-height:.95;color:#fff;letter-spacing:-.03em">FRESH<br>ROAST</div>
-      <div style="position:absolute;left:36px;top:300px;font-size:38px;font-weight:600;color:var(--lime)">Small-batch coffee<br>Brewed daily</div>
-      <div style="position:absolute;left:36px;bottom:50px;font-size:30px;color:#ffffffaa;letter-spacing:.12em">EST. 2025</div>
-    </div>
-    <div id="s6c" class="card" style="left:60px;top:790px;width:450px;height:560px;background:#fff">
-      <div style="position:absolute;left:36px;top:40px;font-size:56px;font-weight:900;color:#15130f">MENU</div>
-      <div style="position:absolute;left:36px;top:130px;font-size:38px;font-weight:600;color:#15130f;line-height:1.7">Flat white ... 4.5<br>Cold brew ... 5.0<br>Croissant ... 3.5<br>Matcha ... 5.5</div>
-    </div>
-    <div id="s6d" class="card" style="left:570px;top:790px;width:450px;height:560px;background:linear-gradient(160deg,#6b4dff,#2b1cc4)">
-      <div style="position:absolute;left:36px;top:60px;font-size:34px;font-weight:700;color:#fff;letter-spacing:.18em">A NOVEL</div>
-      <div style="position:absolute;left:36px;top:140px;font-size:88px;font-weight:900;line-height:.98;color:#fff">Quiet<br>Light</div>
-      <div style="position:absolute;left:36px;bottom:50px;font-size:36px;color:var(--lime);font-weight:700">M. Alvarez</div>
-    </div>
-  </section>
-
-  <!-- ===== S7  29.6–31.9  timer ===== -->
-  <section id="s7" class="clip scene" data-start="29.6" data-duration="2.3" data-track-index="2" style="background:var(--night)">
-    <svg class="abs" style="left:140px;top:210px" width="800" height="800" viewBox="0 0 800 800">
-      <circle cx="400" cy="400" r="340" fill="none" stroke="#2a2740" stroke-width="30"/>
-      <circle id="s7ring" cx="400" cy="400" r="340" fill="none" stroke="#d7ff3a" stroke-width="30" stroke-linecap="round" stroke-dasharray="2137" stroke-dashoffset="0" transform="rotate(-90 400 400)"/>
-    </svg>
-    <div id="s7num" class="abs" style="left:0;top:480px;width:1080px;text-align:center;font-weight:900;font-size:300px;color:#fff;letter-spacing:-.04em">0:20</div>
-    <div class="abs" style="left:0;top:800px;width:1080px;text-align:center;font-weight:800;font-size:44px;letter-spacing:.2em;color:#d7ff3a">SECONDS OR LESS</div>
-  </section>
-
-  <!-- ===== S8  31.9–33.25  free ===== -->
-  <section id="s8" class="clip scene" data-start="31.9" data-duration="1.35" data-track-index="2" style="background:var(--night)">
-    <div id="s8free" class="abs" style="left:0;top:420px;width:1080px;text-align:center;font-weight:900;font-size:330px;letter-spacing:-.04em;color:#d7ff3a;transform:rotate(-6deg)">FREE</div>
-    <div id="s8dots"></div>
-  </section>
-
-  <!-- CTA over closing shot -->
-  <div id="cta" class="clip" data-start="33.4" data-duration="2.6" data-track-index="8" style="left:90px;top:170px;width:900px;height:150px;background:var(--lime);border-radius:75px;display:flex;align-items:center;justify-content:center;gap:26px;z-index:40">
-    <svg width="64" height="64" viewBox="0 0 64 64"><path d="M8 10h48v32H30l-14 12V42H8z" fill="#15130f"/></svg>
-    <span style="font-weight:900;font-size:54px;color:#15130f;letter-spacing:.02em;text-transform:uppercase">Comment “Reve”</span>
-  </div>
-
-
-  <!-- LIVE badge + floating hearts over the opening shot -->
-  <div id="fxA" class="clip fx" data-start="0" data-duration="1.9" data-track-index="7">
-    <div class="badge" id="liveb" style="left:56px;top:70px;background:#ff2d55"><i style="width:14px;height:14px;border-radius:50%;background:#fff;display:inline-block"></i>LIVE</div>
-    <div class="badge" id="viewb" style="left:210px;top:70px;background:rgba(20,20,24,.72)"><svg width="34" height="34" viewBox="0 0 24 24"><path d="M12 5C6 5 2 12 2 12s4 7 10 7 10-7 10-7-4-7-10-7zm0 11a4 4 0 110-8 4 4 0 010 8z" fill="#fff"/></svg><span id="viewn">339</span></div>
-  </div>
-
-  <!-- TikTok-style phone frame for the closing CTA shot -->
-  <div id="tt" class="clip" data-start="33.25" data-duration="2.75" data-track-index="6"></div>
-  <div id="ttui" class="clip fx" data-start="33.25" data-duration="2.75" data-track-index="7" style="z-index:44">
-    <div class="abs" id="ttrail" style="right:90px;top:760px;width:100px;display:flex;flex-direction:column;align-items:center;gap:40px">
-      <div style="width:96px;height:96px;border-radius:50%;background:linear-gradient(135deg,#6b4dff,#ff4d2e);border:5px solid #fff;position:relative"><i style="position:absolute;left:30px;bottom:-16px;width:36px;height:36px;border-radius:50%;background:#ff2d55;color:#fff;font:900 28px/36px Arial;text-align:center;font-style:normal">+</i></div>
-      <svg width="86" height="86" viewBox="0 0 64 64"><path d="M32 56C10 40 4 28 4 20 4 12 10 6 18 6c6 0 11 3 14 9 3-6 8-9 14-9 8 0 14 6 14 14 0 8-6 20-28 36z" fill="#ff2d55"/></svg>
-      <svg width="86" height="86" viewBox="0 0 64 64"><path d="M8 10h48v34H28L14 56V44H8z" fill="#fff" stroke="#15130f" stroke-width="3" stroke-linejoin="round" opacity=".95"/></svg>
-      <svg width="86" height="86" viewBox="0 0 64 64"><path d="M54 8L8 28l16 6 6 20 8-14 16 8z" fill="#fff" stroke="#15130f" stroke-width="3" stroke-linejoin="round" opacity=".95"/></svg>
-    </div>
-    <div class="abs" style="left:90px;top:1230px;color:#fff;font-weight:800;font-size:40px;text-shadow:0 3px 12px rgba(0,0,0,.6)">@your.handle</div>
-  </div>
-  <div id="fxB" class="clip fx" data-start="33.25" data-duration="2.75" data-track-index="5"></div>
-
-  <!-- blue whoosh used on every cut -->
-  <div id="whoosh" class="clip" data-start="0" data-duration="36" data-track-index="10"></div>
-
-  <!-- sparkles -->
-  <div id="fxS" class="clip fx" data-start="21.9" data-duration="11.4" data-track-index="4"></div>
-
-  <!-- captions -->
-  <div id="cap0" class="cap clip" data-start="0" data-duration="2.88" data-track-index="9"><div class="sel"><i></i><i></i><i></i><i></i></div><div class="sup"><span class="w">This</span></div><div class="kw"><span class="w">AI</span></div><div class="sup"><span class="w">tool</span> <span class="w">does</span> <span class="w">something</span> <span class="w">no</span> <span class="w">one</span> <span class="w">talks</span> <span class="w">about</span></div></div>
-      <div id="cap1" class="cap clip plain" data-start="3.16" data-duration="0.98" data-track-index="9"><div class="sup"><span class="w">and</span> <span class="w">honestly,</span></div></div>
-      <div id="cap2" class="cap clip" data-start="4.36" data-duration="1.89" data-track-index="9"><div class="sel"><i></i><i></i><i></i><i></i></div><div class="sup"><span class="w">it</span> <span class="w">should</span></div><div class="kw"><span class="w">scare</span></div><div class="sup"><span class="w">your</span> <span class="w">designer</span> <span class="w">a</span> <span class="w">little</span></div></div>
-      <div id="cap3" class="cap clip light plain" data-start="6.81" data-duration="1.15" data-track-index="9"><div class="sup"><span class="w">You</span> <span class="w">know</span> <span class="w">that</span> <span class="w">feeling,</span></div></div>
-      <div id="cap4" class="cap clip light" data-start="8.25" data-duration="1.42" data-track-index="9"><div class="sel"><i></i><i></i><i></i><i></i></div><div class="sup"><span class="w">you</span> <span class="w">have</span> <span class="w">a</span> <span class="w">clear</span></div><div class="kw"><span class="w">vision,</span></div></div>
-      <div id="cap5" class="cap clip light" data-start="10" data-duration="1.73" data-track-index="9"><div class="sel"><i></i><i></i><i></i><i></i></div><div class="sup"><span class="w">you</span></div><div class="kw"><span class="w">type</span></div><div class="sup"><span class="w">it</span> <span class="w">into</span> <span class="w">an</span> <span class="w">AI</span> <span class="w">tool,</span></div></div>
-      <div id="cap6" class="cap clip light plain" data-start="12.03" data-duration="1.30" data-track-index="9"><div class="sup"><span class="w">and</span> <span class="w">what</span> <span class="w">comes</span> <span class="w">out</span></div></div>
-      <div id="cap7" class="cap clip light" data-start="13.61" data-duration="1.98" data-track-index="9"><div class="sel"><i></i><i></i><i></i><i></i></div><div class="sup"><span class="w">looks</span></div><div class="kw"><span class="w">nothing</span> <span class="w">like</span></div><div class="sup"><span class="w">what</span> <span class="w">you</span> <span class="w">imagine</span></div></div>
-      <div id="cap8" class="cap clip" data-start="16.18" data-duration="0.85" data-track-index="9"><div class="sel"><i></i><i></i><i></i><i></i></div><div class="kw"><span class="w">Wrong</span></div><div class="sup"><span class="w">colors,</span></div></div>
-      <div id="cap9" class="cap clip" data-start="17.31" data-duration="0.88" data-track-index="9"><div class="sel"><i></i><i></i><i></i><i></i></div><div class="kw"><span class="w">broken</span></div><div class="sup"><span class="w">text,</span></div></div>
-      <div id="cap10" class="cap clip" data-start="18.54" data-duration="0.75" data-track-index="9"><div class="sel"><i></i><i></i><i></i><i></i></div><div class="kw"><span class="w">generic</span></div><div class="sup"><span class="w">feel,</span></div></div>
-      <div id="cap11" class="cap clip plain" data-start="19.62" data-duration="1.81" data-track-index="9"><div class="sup"><span class="w">so</span> <span class="w">you</span> <span class="w">either</span> <span class="w">redo</span> <span class="w">it</span> <span class="w">manually</span></div></div>
-      <div id="cap12" class="cap clip" data-start="21.57" data-duration="0.80" data-track-index="9"><div class="sel"><i></i><i></i><i></i><i></i></div><div class="sup"><span class="w">or</span> <span class="w">just</span></div><div class="kw"><span class="w">settle</span></div></div>
-      <div id="cap13" class="cap clip" data-start="22.88" data-duration="0.79" data-track-index="9"><div class="sel"><i></i><i></i><i></i><i></i></div><div class="kw"><span class="w">Reve</span></div><div class="sup"><span class="w">image</span></div></div>
-      <div id="cap14" class="cap clip" data-start="23.64" data-duration="1.68" data-track-index="9"><div class="sel"><i></i><i></i><i></i><i></i></div><div class="sup"><span class="w">actually</span> <span class="w">gets</span> <span class="w">what</span></div><div class="kw"><span class="w">you</span> <span class="w">mean</span></div></div>
-      <div id="cap15" class="cap clip light" data-start="25.76" data-duration="0.91" data-track-index="9"><div class="sel"><i></i><i></i><i></i><i></i></div><div class="kw"><span class="w">Studio</span></div><div class="sup"><span class="w">visuals,</span></div></div>
-      <div id="cap16" class="cap clip light plain" data-start="27.01" data-duration="1.24" data-track-index="9"><div class="sup"><span class="w">text</span> <span class="w">inside</span> <span class="w">images</span></div></div>
-      <div id="cap17" class="cap clip light" data-start="28.21" data-duration="1.27" data-track-index="9"><div class="sel"><i></i><i></i><i></i><i></i></div><div class="sup"><span class="w">that's</span> <span class="w">actually</span></div><div class="kw"><span class="w">readable,</span></div></div>
-      <div id="cap18" class="cap clip" data-start="29.95" data-duration="1.69" data-track-index="9"><div class="sel"><i></i><i></i><i></i><i></i></div><div class="sup"><span class="w">all</span> <span class="w">of</span> <span class="w">it</span> <span class="w">in</span> <span class="w">under</span></div><div class="kw"><span class="w">20</span> <span class="w">seconds</span></div></div>
-      <div id="cap19" class="cap clip" data-start="31.96" data-duration="0.77" data-track-index="9"><div class="sel"><i></i><i></i><i></i><i></i></div><div class="sup"><span class="w">And</span> <span class="w">it's</span></div><div class="kw"><span class="w">free</span></div></div>
-      <div id="cap20" class="cap clip" data-start="33.25" data-duration="0.74" data-track-index="9"><div class="sel"><i></i><i></i><i></i><i></i></div><div class="kw"><span class="w">Comment</span></div><div class="sup"><span class="w">“Reve”</span></div></div>
-      <div id="cap21" class="cap clip" data-start="34.03" data-duration="1.82" data-track-index="9"><div class="sel"><i></i><i></i><i></i><i></i></div><div class="sup"><span class="w">and</span> <span class="w">I'll</span> <span class="w">send</span> <span class="w">it</span></div><div class="kw"><span class="w">straight</span> <span class="w">to</span> <span class="w">your</span> <span class="w">DM</span></div></div>
+  <div id="flash" class="clip" data-start="0" data-duration="36" data-track-index="10"></div>
+  <div id="cap0" class="cap clip onp" data-start="0" data-duration="2.88" data-track-index="9"><div class="sup"><span class="w">This</span></div><div class="kw"><span class="w">AI</span></div><div class="sup"><span class="w">tool</span> <span class="w">does</span> <span class="w">something</span> <span class="w">no</span> <span class="w">one</span> <span class="w">talks</span> <span class="w">about</span></div></div>
+  <div id="cap1" class="cap clip" data-start="3.16" data-duration="0.98" data-track-index="9"><div class="sup"><span class="w">and</span> <span class="w">honestly,</span></div></div>
+  <div id="cap2" class="cap clip" data-start="4.36" data-duration="1.89" data-track-index="9"><div class="sup"><span class="w">it</span> <span class="w">should</span></div><div class="kw"><span class="w">scare</span></div><div class="sup"><span class="w">your</span> <span class="w">designer</span> <span class="w">a</span> <span class="w">little</span></div></div>
+  <div id="cap3" class="cap clip" data-start="6.81" data-duration="1.15" data-track-index="9"><div class="sup"><span class="w">You</span> <span class="w">know</span> <span class="w">that</span> <span class="w">feeling,</span></div></div>
+  <div id="cap4" class="cap clip" data-start="8.25" data-duration="1.42" data-track-index="9"><div class="sup"><span class="w">you</span> <span class="w">have</span> <span class="w">a</span> <span class="w">clear</span></div><div class="kw"><span class="w">vision,</span></div></div>
+  <div id="cap5" class="cap clip" data-start="10" data-duration="1.73" data-track-index="9"><div class="sup"><span class="w">you</span></div><div class="kw"><span class="w">type</span></div><div class="sup"><span class="w">it</span> <span class="w">into</span> <span class="w">an</span> <span class="w">AI</span> <span class="w">tool,</span></div></div>
+  <div id="cap6" class="cap clip" data-start="12.03" data-duration="1.30" data-track-index="9"><div class="sup"><span class="w">and</span> <span class="w">what</span> <span class="w">comes</span> <span class="w">out</span></div></div>
+  <div id="cap7" class="cap clip" data-start="13.61" data-duration="1.98" data-track-index="9"><div class="sup"><span class="w">looks</span></div><div class="kw"><span class="w">nothing</span> <span class="w">like</span></div><div class="sup"><span class="w">what</span> <span class="w">you</span> <span class="w">imagine</span></div></div>
+  <div id="cap8" class="cap clip" data-start="16.18" data-duration="0.85" data-track-index="9"><div class="kw"><span class="w">Wrong</span></div><div class="sup"><span class="w">colors,</span></div></div>
+  <div id="cap9" class="cap clip" data-start="17.31" data-duration="0.88" data-track-index="9"><div class="kw"><span class="w">broken</span></div><div class="sup"><span class="w">text,</span></div></div>
+  <div id="cap10" class="cap clip" data-start="18.54" data-duration="0.75" data-track-index="9"><div class="kw"><span class="w">generic</span></div><div class="sup"><span class="w">feel,</span></div></div>
+  <div id="cap11" class="cap clip onp" data-start="19.62" data-duration="1.81" data-track-index="9"><div class="sup"><span class="w">so</span> <span class="w">you</span> <span class="w">either</span> <span class="w">redo</span> <span class="w">it</span> <span class="w">manually</span></div></div>
+  <div id="cap12" class="cap clip" data-start="21.57" data-duration="0.80" data-track-index="9"><div class="sup"><span class="w">or</span> <span class="w">just</span></div><div class="kw"><span class="w">settle</span></div></div>
+  <div id="cap13" class="cap clip" data-start="22.88" data-duration="0.79" data-track-index="9"><div class="kw"><span class="w">Reve</span></div><div class="sup"><span class="w">image</span></div></div>
+  <div id="cap14" class="cap clip" data-start="23.64" data-duration="1.68" data-track-index="9"><div class="sup"><span class="w">actually</span> <span class="w">gets</span> <span class="w">what</span></div><div class="kw"><span class="w">you</span> <span class="w">mean</span></div></div>
+  <div id="cap15" class="cap clip" data-start="25.76" data-duration="0.91" data-track-index="9"><div class="kw"><span class="w">Studio</span></div><div class="sup"><span class="w">visuals,</span></div></div>
+  <div id="cap16" class="cap clip" data-start="27.01" data-duration="1.24" data-track-index="9"><div class="sup"><span class="w">text</span> <span class="w">inside</span> <span class="w">images</span></div></div>
+  <div id="cap17" class="cap clip" data-start="28.21" data-duration="1.27" data-track-index="9"><div class="sup"><span class="w">that's</span> <span class="w">actually</span></div><div class="kw"><span class="w">readable,</span></div></div>
+  <div id="cap18" class="cap clip" data-start="29.95" data-duration="1.69" data-track-index="9"><div class="sup"><span class="w">all</span> <span class="w">of</span> <span class="w">it</span> <span class="w">in</span> <span class="w">under</span></div><div class="kw"><span class="w">20</span> <span class="w">seconds</span></div></div>
+  <div id="cap19" class="cap clip" data-start="31.96" data-duration="0.77" data-track-index="9"><div class="sup"><span class="w">And</span> <span class="w">it's</span></div><div class="kw"><span class="w">free</span></div></div>
+  <div id="cap20" class="cap clip" data-start="33.25" data-duration="0.74" data-track-index="9"><div class="kw"><span class="w">Comment</span></div><div class="sup"><span class="w">“Reve”</span></div></div>
+  <div id="cap21" class="cap clip" data-start="34.03" data-duration="1.82" data-track-index="9"><div class="sup"><span class="w">and</span> <span class="w">I'll</span> <span class="w">send</span> <span class="w">it</span></div><div class="kw"><span class="w">straight</span> <span class="w">to</span> <span class="w">your</span> <span class="w">DM</span></div></div>
 </div>
 
 <script>
 const tl = gsap.timeline({ paused: true });
-const E = "power3.out";
+const E = "power3.out", B = "back.out(1.8)";
 
-// ---- captions: word pop-in, exit
-tl.from("#cap0 .w",{y:34,scale:.7,opacity:0,duration:.18,ease:"back.out(2)",stagger:0.093},0);tl.to("#cap0",{opacity:0,duration:.12},2.75);
-tl.from("#cap1 .w",{y:34,scale:.7,opacity:0,duration:.18,ease:"back.out(2)",stagger:0.219},3.16);tl.to("#cap1",{opacity:0,duration:.12},4.01);
-tl.from("#cap2 .w",{y:34,scale:.7,opacity:0,duration:.18,ease:"back.out(2)",stagger:0.120},4.36);tl.to("#cap2",{opacity:0,duration:.12},6.12);
-tl.from("#cap3 .w",{y:34,scale:.7,opacity:0,duration:.18,ease:"back.out(2)",stagger:0.135},6.81);tl.to("#cap3",{opacity:0,duration:.12},7.83);
-tl.from("#cap4 .w",{y:34,scale:.7,opacity:0,duration:.18,ease:"back.out(2)",stagger:0.140},8.25);tl.to("#cap4",{opacity:0,duration:.12},9.54);
-tl.from("#cap5 .w",{y:34,scale:.7,opacity:0,duration:.18,ease:"back.out(2)",stagger:0.120},10);tl.to("#cap5",{opacity:0,duration:.12},11.60);
-tl.from("#cap6 .w",{y:34,scale:.7,opacity:0,duration:.18,ease:"back.out(2)",stagger:0.158},12.03);tl.to("#cap6",{opacity:0,duration:.12},13.20);
-tl.from("#cap7 .w",{y:34,scale:.7,opacity:0,duration:.18,ease:"back.out(2)",stagger:0.140},13.61);tl.to("#cap7",{opacity:0,duration:.12},15.46);
-tl.from("#cap8 .w",{y:34,scale:.7,opacity:0,duration:.18,ease:"back.out(2)",stagger:0.180},16.18);tl.to("#cap8",{opacity:0,duration:.12},16.90);
-tl.from("#cap9 .w",{y:34,scale:.7,opacity:0,duration:.18,ease:"back.out(2)",stagger:0.189},17.31);tl.to("#cap9",{opacity:0,duration:.12},18.06);
-tl.from("#cap10 .w",{y:34,scale:.7,opacity:0,duration:.18,ease:"back.out(2)",stagger:0.150},18.54);tl.to("#cap10",{opacity:0,duration:.12},19.16);
-tl.from("#cap11 .w",{y:34,scale:.7,opacity:0,duration:.18,ease:"back.out(2)",stagger:0.140},19.62);tl.to("#cap11",{opacity:0,duration:.12},21.30);
-tl.from("#cap12 .w",{y:34,scale:.7,opacity:0,duration:.18,ease:"back.out(2)",stagger:0.110},21.57);tl.to("#cap12",{opacity:0,duration:.12},22.24);
-tl.from("#cap13 .w",{y:34,scale:.7,opacity:0,duration:.18,ease:"back.out(2)",stagger:0.162},22.88);tl.to("#cap13",{opacity:0,duration:.12},23.54);
-tl.from("#cap14 .w",{y:34,scale:.7,opacity:0,duration:.18,ease:"back.out(2)",stagger:0.168},23.64);tl.to("#cap14",{opacity:0,duration:.12},25.19);
-tl.from("#cap15 .w",{y:34,scale:.7,opacity:0,duration:.18,ease:"back.out(2)",stagger:0.198},25.76);tl.to("#cap15",{opacity:0,duration:.12},26.54);
-tl.from("#cap16 .w",{y:34,scale:.7,opacity:0,duration:.18,ease:"back.out(2)",stagger:0.198},27.01);tl.to("#cap16",{opacity:0,duration:.12},28.12);
-tl.from("#cap17 .w",{y:34,scale:.7,opacity:0,duration:.18,ease:"back.out(2)",stagger:0.204},28.21);tl.to("#cap17",{opacity:0,duration:.12},29.35);
-tl.from("#cap18 .w",{y:34,scale:.7,opacity:0,duration:.18,ease:"back.out(2)",stagger:0.120},29.95);tl.to("#cap18",{opacity:0,duration:.12},31.51);
-tl.from("#cap19 .w",{y:34,scale:.7,opacity:0,duration:.18,ease:"back.out(2)",stagger:0.104},31.96);tl.to("#cap19",{opacity:0,duration:.12},32.60);
-tl.from("#cap20 .w",{y:34,scale:.7,opacity:0,duration:.18,ease:"back.out(2)",stagger:0.147},33.25);tl.to("#cap20",{opacity:0,duration:.12},33.86);
-tl.from("#cap21 .w",{y:34,scale:.7,opacity:0,duration:.18,ease:"back.out(2)",stagger:0.105},34.03);tl.to("#cap21",{opacity:0,duration:.12},35.72);
-// light-background scenes use dark captions
-[[6.5,12],[12,16],[25.8,29.6]].forEach(([a,b])=>{});
+// captions
+tl.from("#cap0 .sup .w",{y:22,opacity:0,filter:"blur(8px)",duration:.28,ease:E,stagger:0.086},0);tl.from("#cap0 .kw .w",{y:36,opacity:0,scale:.92,filter:"blur(10px)",duration:.34,ease:B,stagger:.08},0.06);tl.to("#cap0",{opacity:0,duration:.12},2.75);
+tl.from("#cap1 .sup .w",{y:22,opacity:0,filter:"blur(8px)",duration:.28,ease:E,stagger:0.201},3.16);tl.from("#cap1 .kw .w",{y:36,opacity:0,scale:.92,filter:"blur(10px)",duration:.34,ease:B,stagger:.08},3.22);tl.to("#cap1",{opacity:0,duration:.12},4.01);
+tl.from("#cap2 .sup .w",{y:22,opacity:0,filter:"blur(8px)",duration:.28,ease:E,stagger:0.110},4.36);tl.from("#cap2 .kw .w",{y:36,opacity:0,scale:.92,filter:"blur(10px)",duration:.34,ease:B,stagger:.08},4.42);tl.to("#cap2",{opacity:0,duration:.12},6.12);
+tl.from("#cap3 .sup .w",{y:22,opacity:0,filter:"blur(8px)",duration:.28,ease:E,stagger:0.124},6.81);tl.from("#cap3 .kw .w",{y:36,opacity:0,scale:.92,filter:"blur(10px)",duration:.34,ease:B,stagger:.08},6.87);tl.to("#cap3",{opacity:0,duration:.12},7.83);
+tl.from("#cap4 .sup .w",{y:22,opacity:0,filter:"blur(8px)",duration:.28,ease:E,stagger:0.129},8.25);tl.from("#cap4 .kw .w",{y:36,opacity:0,scale:.92,filter:"blur(10px)",duration:.34,ease:B,stagger:.08},8.31);tl.to("#cap4",{opacity:0,duration:.12},9.54);
+tl.from("#cap5 .sup .w",{y:22,opacity:0,filter:"blur(8px)",duration:.28,ease:E,stagger:0.110},10);tl.from("#cap5 .kw .w",{y:36,opacity:0,scale:.92,filter:"blur(10px)",duration:.34,ease:B,stagger:.08},10.06);tl.to("#cap5",{opacity:0,duration:.12},11.60);
+tl.from("#cap6 .sup .w",{y:22,opacity:0,filter:"blur(8px)",duration:.28,ease:E,stagger:0.144},12.03);tl.from("#cap6 .kw .w",{y:36,opacity:0,scale:.92,filter:"blur(10px)",duration:.34,ease:B,stagger:.08},12.09);tl.to("#cap6",{opacity:0,duration:.12},13.20);
+tl.from("#cap7 .sup .w",{y:22,opacity:0,filter:"blur(8px)",duration:.28,ease:E,stagger:0.128},13.61);tl.from("#cap7 .kw .w",{y:36,opacity:0,scale:.92,filter:"blur(10px)",duration:.34,ease:B,stagger:.08},13.67);tl.to("#cap7",{opacity:0,duration:.12},15.46);
+tl.from("#cap8 .sup .w",{y:22,opacity:0,filter:"blur(8px)",duration:.28,ease:E,stagger:0.165},16.18);tl.from("#cap8 .kw .w",{y:36,opacity:0,scale:.92,filter:"blur(10px)",duration:.34,ease:B,stagger:.08},16.24);tl.to("#cap8",{opacity:0,duration:.12},16.90);
+tl.from("#cap9 .sup .w",{y:22,opacity:0,filter:"blur(8px)",duration:.28,ease:E,stagger:0.173},17.31);tl.from("#cap9 .kw .w",{y:36,opacity:0,scale:.92,filter:"blur(10px)",duration:.34,ease:B,stagger:.08},17.37);tl.to("#cap9",{opacity:0,duration:.12},18.06);
+tl.from("#cap10 .sup .w",{y:22,opacity:0,filter:"blur(8px)",duration:.28,ease:E,stagger:0.138},18.54);tl.from("#cap10 .kw .w",{y:36,opacity:0,scale:.92,filter:"blur(10px)",duration:.34,ease:B,stagger:.08},18.60);tl.to("#cap10",{opacity:0,duration:.12},19.16);
+tl.from("#cap11 .sup .w",{y:22,opacity:0,filter:"blur(8px)",duration:.28,ease:E,stagger:0.128},19.62);tl.from("#cap11 .kw .w",{y:36,opacity:0,scale:.92,filter:"blur(10px)",duration:.34,ease:B,stagger:.08},19.68);tl.to("#cap11",{opacity:0,duration:.12},21.30);
+tl.from("#cap12 .sup .w",{y:22,opacity:0,filter:"blur(8px)",duration:.28,ease:E,stagger:0.101},21.57);tl.from("#cap12 .kw .w",{y:36,opacity:0,scale:.92,filter:"blur(10px)",duration:.34,ease:B,stagger:.08},21.63);tl.to("#cap12",{opacity:0,duration:.12},22.24);
+tl.from("#cap13 .sup .w",{y:22,opacity:0,filter:"blur(8px)",duration:.28,ease:E,stagger:0.149},22.88);tl.from("#cap13 .kw .w",{y:36,opacity:0,scale:.92,filter:"blur(10px)",duration:.34,ease:B,stagger:.08},22.94);tl.to("#cap13",{opacity:0,duration:.12},23.54);
+tl.from("#cap14 .sup .w",{y:22,opacity:0,filter:"blur(8px)",duration:.28,ease:E,stagger:0.154},23.64);tl.from("#cap14 .kw .w",{y:36,opacity:0,scale:.92,filter:"blur(10px)",duration:.34,ease:B,stagger:.08},23.70);tl.to("#cap14",{opacity:0,duration:.12},25.19);
+tl.from("#cap15 .sup .w",{y:22,opacity:0,filter:"blur(8px)",duration:.28,ease:E,stagger:0.182},25.76);tl.from("#cap15 .kw .w",{y:36,opacity:0,scale:.92,filter:"blur(10px)",duration:.34,ease:B,stagger:.08},25.82);tl.to("#cap15",{opacity:0,duration:.12},26.54);
+tl.from("#cap16 .sup .w",{y:22,opacity:0,filter:"blur(8px)",duration:.28,ease:E,stagger:0.181},27.01);tl.from("#cap16 .kw .w",{y:36,opacity:0,scale:.92,filter:"blur(10px)",duration:.34,ease:B,stagger:.08},27.07);tl.to("#cap16",{opacity:0,duration:.12},28.12);
+tl.from("#cap17 .sup .w",{y:22,opacity:0,filter:"blur(8px)",duration:.28,ease:E,stagger:0.187},28.21);tl.from("#cap17 .kw .w",{y:36,opacity:0,scale:.92,filter:"blur(10px)",duration:.34,ease:B,stagger:.08},28.27);tl.to("#cap17",{opacity:0,duration:.12},29.35);
+tl.from("#cap18 .sup .w",{y:22,opacity:0,filter:"blur(8px)",duration:.28,ease:E,stagger:0.110},29.95);tl.from("#cap18 .kw .w",{y:36,opacity:0,scale:.92,filter:"blur(10px)",duration:.34,ease:B,stagger:.08},30.01);tl.to("#cap18",{opacity:0,duration:.12},31.51);
+tl.from("#cap19 .sup .w",{y:22,opacity:0,filter:"blur(8px)",duration:.28,ease:E,stagger:0.095},31.96);tl.from("#cap19 .kw .w",{y:36,opacity:0,scale:.92,filter:"blur(10px)",duration:.34,ease:B,stagger:.08},32.02);tl.to("#cap19",{opacity:0,duration:.12},32.60);
+tl.from("#cap20 .sup .w",{y:22,opacity:0,filter:"blur(8px)",duration:.28,ease:E,stagger:0.135},33.25);tl.from("#cap20 .kw .w",{y:36,opacity:0,scale:.92,filter:"blur(10px)",duration:.34,ease:B,stagger:.08},33.31);tl.to("#cap20",{opacity:0,duration:.12},33.86);
+tl.from("#cap21 .sup .w",{y:22,opacity:0,filter:"blur(8px)",duration:.28,ease:E,stagger:0.096},34.03);tl.from("#cap21 .kw .w",{y:36,opacity:0,scale:.92,filter:"blur(10px)",duration:.34,ease:B,stagger:.08},34.09);tl.to("#cap21",{opacity:0,duration:.12},35.72);
+// dark-scene captions
+["cap8","cap9","cap10"].forEach(id=>document.getElementById(id).classList.add("dk"));
 
-// ---- scene entrances
-function sceneIn(id,t){tl.from(id,{opacity:0,duration:.12},t);}
-sceneIn("#s1",1.9);sceneIn("#s2",6.5);sceneIn("#s3",12.0);sceneIn("#s4",16.0);sceneIn("#s5",21.9);sceneIn("#s6",25.8);sceneIn("#s7",29.6);sceneIn("#s8",31.9);
+// cuts: quick paper flash
+[1.4,6.5,12.0,16.0,19.6,20.8,22.7,25.8,29.6,31.9,33.25,34.6].forEach(t=>{
+  tl.set("#flash",{opacity:0},t-0.07);tl.to("#flash",{opacity:.55,duration:.06,ease:"none"},t-0.06);tl.to("#flash",{opacity:0,duration:.14,ease:"power1.out"},t+0.01);});
 
-// S1 slow push + cursor blink + fig breathe
-tl.fromTo("#s1art",{scale:1.0,transformOrigin:"50% 40%"},{scale:1.1,duration:4.6,ease:"none"},1.9);
-tl.fromTo("#s1cursor",{opacity:1},{opacity:0,duration:.3,repeat:7,yoyo:true,ease:"steps(1)"},1.9);
-tl.from("#s1notes",{y:-40,opacity:0,duration:.5,ease:E},2.3);
-tl.from("#s1tag",{x:-40,opacity:0,duration:.4,ease:E},2.2);
+// cutout entrance helper: fly in from an edge with slight rotation, then drift
+function fly(sel,t,fx,fy,rot,drift){tl.from(sel,{x:fx,y:fy,rotate:rot,opacity:0,duration:.55,ease:E},t);
+  if(drift)tl.to(sel,{x:"+="+drift[0],y:"+="+drift[1],duration:3,ease:"sine.inOut"},t+.55);}
 
-// S2 vision glow then prompt typing
-tl.to("#s2scene",{opacity:1,duration:.7,ease:E},8.2);
-tl.fromTo("#s2sparks circle",{scale:0,transformOrigin:"50% 50%"},{scale:1,duration:.4,stagger:.12,ease:"back.out(3)"},8.4);
-tl.from("#s2prompt",{y:140,opacity:0,duration:.5,ease:E},9.9);
-const promptText="a cozy cafe poster, warm light, clean bold typography";
-const typeObj={n:0};
-tl.to(typeObj,{n:promptText.length,duration:1.4,ease:"none",onUpdate(){document.getElementById("s2type").textContent=promptText.slice(0,Math.round(typeObj.n))+(Math.round(typeObj.n)<promptText.length?"▌":"");}},10.1);
-
-// S3 two cards then wrong one glitches
-tl.from("#s3a",{x:-500,rotate:-6,duration:.45,ease:E},12.1);
-tl.from("#s3b",{x:500,rotate:6,duration:.45,ease:E},13.6);
-tl.from("#s3la",{y:30,opacity:0,duration:.3},12.5);
-tl.from("#s3lb",{y:30,opacity:0,duration:.3},14.0);
-tl.to("#s3b",{x:"+=14",skewX:4,duration:.05,repeat:7,yoyo:true,ease:"steps(1)"},14.8);
-
-// S4 three callouts stamp in
-tl.from("#s4a",{scale:.6,opacity:0,duration:.25,ease:"back.out(2.5)"},16.18);
-tl.from("#s4b",{scale:.6,opacity:0,duration:.25,ease:"back.out(2.5)"},17.31);
-tl.from("#s4c",{scale:.6,opacity:0,duration:.25,ease:"back.out(2.5)"},18.54);
-tl.to("#s4glitch",{x:"+=10",skewX:-8,duration:.05,repeat:9,yoyo:true,ease:"steps(1)"},17.4);
-
-// person windows: gentle punch-in so the shot never feels static
-tl.fromTo("#p0",{scale:1.0},{scale:1.08,duration:1.9,ease:"none"},0);
-tl.fromTo("#p1",{scale:1.08},{scale:1.0,duration:2.3,ease:"none"},19.6);
-tl.fromTo("#p2",{scale:1.0},{scale:1.1,duration:2.75,ease:"none"},33.25);
-tl.from("#cta",{y:-60,opacity:0,scale:.8,duration:.4,ease:"back.out(2)"},33.4);
-
-// S5 reveal
-tl.from("#s5ring1",{scale:.2,opacity:0,duration:.9,ease:E},22.2);
-tl.from("#s5ring2",{scale:.2,opacity:0,duration:1.1,ease:E},22.3);
-tl.from("#s5word",{y:120,opacity:0,scale:.85,duration:.6,ease:"back.out(1.8)"},22.88);
-tl.from("#s5sub",{opacity:0,y:30,duration:.5,ease:E},23.5);
-
-// S6 cards stagger + parallax drift
-tl.from(["#s6a","#s6b","#s6c","#s6d"],{y:260,opacity:0,rotate:4,duration:.45,ease:E,stagger:{amount:1.6}},25.9);
-tl.to(["#s6a","#s6c"],{yPercent:-4,duration:3.4,ease:"none"},25.9);
-tl.to(["#s6b","#s6d"],{yPercent:4,duration:3.4,ease:"none"},25.9);
-
-// S7 timer counts 0:20 -> 0:00 as ring fills
-const tm={v:20};
-tl.to(tm,{v:0,duration:1.8,ease:"power1.inOut",onUpdate(){const s=Math.ceil(tm.v);document.getElementById("s7num").textContent="0:"+String(s).padStart(2,"0");}},29.75);
-tl.to("#s7ring",{strokeDashoffset:2137,duration:1.8,ease:"power1.inOut"},29.75);
-
-// S8 free stamp + confetti
-tl.from("#s8free",{scale:2.6,opacity:0,duration:.3,ease:"power4.out"},31.96);
-const dots=document.getElementById("s8dots");
-for(let i=0;i<24;i++){const d=document.createElement("i");const a=i/24*Math.PI*2;d.style.cssText="position:absolute;left:540px;top:760px;width:22px;height:22px;border-radius:50%;background:"+["#fff","#d7ff3a","#ff4d2e"][i%3];dots.appendChild(d);
-tl.fromTo(d,{x:0,y:0,scale:0},{x:Math.cos(a)*(380+(i%4)*60),y:Math.sin(a)*(380+(i%3)*70),scale:1,duration:.5,ease:"power3.out"},32.0);}
-
-
-// ---- v2 reference-style extras
-const HEART="<svg class=\"heart\" viewBox=\"0 0 64 64\"><path d=\"M32 56C10 40 4 28 4 20 4 12 10 6 18 6c6 0 11 3 14 9 3-6 8-9 14-9 8 0 14 6 14 14 0 8-6 20-28 36z\" fill=\"@@C@@\"/></svg>";
-function spawn(parent,svg,color,x,y,t,dur,rise,size){const w=document.createElement("div");w.className="abs";w.style.cssText="left:"+x+"px;top:"+y+"px;width:"+size+"px;height:"+size+"px";w.innerHTML=svg.split("@@C@@").join(color);parent.appendChild(w);
-  tl.fromTo(w,{y:0,scale:0,opacity:0},{y:-rise,scale:1,opacity:1,duration:dur*.35,ease:"back.out(2)"},t);tl.to(w,{y:-rise*1.5,opacity:0,duration:dur*.65,ease:"power1.in"},t+dur*.35);}
-const hc=["#ff2d55","#ff6b8b","#ff9ab0","#ffb703","#6b4dff"];
-const fxA=document.getElementById("fxA"),fxB=document.getElementById("fxB"),fxS=document.getElementById("fxS");
-for(let i=0;i<9;i++){spawn(fxA,HEART,hc[i%5],720+((i*53)%260),1180-((i*37)%140),0.25+i*0.16,0.9,260+(i%3)*60,54+(i%3)*14);}
-for(let i=0;i<12;i++){spawn(fxB,HEART,hc[(i+2)%5],130+((i*79)%760),1320-((i*41)%120),33.6+i*0.17,1.1,300+(i%4)*50,56+(i%3)*14);}
-tl.from("#liveb",{x:-120,opacity:0,duration:.35,ease:"back.out(2)"},0.1);
-tl.from("#viewb",{x:-120,opacity:0,duration:.35,ease:"back.out(2)"},0.2);
-const vn={v:339};tl.to(vn,{v:1204,duration:1.8,ease:"power1.out",onUpdate(){document.getElementById("viewn").textContent=Math.round(vn.v);}},0);
-tl.from("#tt",{scale:1.15,opacity:0,duration:.35,ease:"power3.out"},33.25);
-tl.from("#ttrail > *",{x:90,opacity:0,duration:.3,stagger:.08,ease:"back.out(2)"},33.5);
-// sparkle stars (4-point) around the reveal and the poster scene
-const STAR='<svg viewBox="0 0 64 64"><path d="M32 2C34 22 42 30 62 32 42 34 34 42 32 62 30 42 22 34 2 32 22 30 30 22 32 2z" fill="@@C@@"/></svg>';
-[[110,300,"#ffe27a",21.9,70],[900,240,"#ffffff",22.1,90],[170,900,"#ff9ab0",22.4,60],[880,860,"#2dff6e",22.3,80],[80,200,"#ffb703",26.0,64],[940,150,"#ff4d2e",26.2,76],[540,60,"#6b4dff",26.4,56]].forEach(([x,y,c,t,sz],k)=>{
-  const w=document.createElement("div");w.className="abs";w.style.cssText="left:"+x+"px;top:"+y+"px;width:"+sz+"px;height:"+sz+"px";w.innerHTML=STAR.split("@@C@@").join(c);fxS.appendChild(w);
-  tl.fromTo(w,{scale:0,rotate:-90,opacity:0},{scale:1,rotate:0,opacity:1,duration:.45,ease:"back.out(2.4)"},t);
-  tl.to(w,{scale:.55,rotate:45,duration:.8,repeat:2,yoyo:true,ease:"sine.inOut"},t+.45);
-  tl.to(w,{opacity:0,duration:.3},t+3.2);});
-// selection box intro on keyword captions
-tl.fromTo("#cap0 .sel",{scaleX:.55,opacity:0},{scaleX:1,opacity:1,duration:.22,ease:"power3.out"},0);tl.to("#cap0 .sel",{opacity:0,duration:.25},0.70);
-
-tl.fromTo("#cap2 .sel",{scaleX:.55,opacity:0},{scaleX:1,opacity:1,duration:.22,ease:"power3.out"},4.36);tl.to("#cap2 .sel",{opacity:0,duration:.25},5.06);
-
-tl.fromTo("#cap4 .sel",{scaleX:.55,opacity:0},{scaleX:1,opacity:1,duration:.22,ease:"power3.out"},8.25);tl.to("#cap4 .sel",{opacity:0,duration:.25},8.95);
-tl.fromTo("#cap5 .sel",{scaleX:.55,opacity:0},{scaleX:1,opacity:1,duration:.22,ease:"power3.out"},10);tl.to("#cap5 .sel",{opacity:0,duration:.25},10.70);
-
-tl.fromTo("#cap7 .sel",{scaleX:.55,opacity:0},{scaleX:1,opacity:1,duration:.22,ease:"power3.out"},13.61);tl.to("#cap7 .sel",{opacity:0,duration:.25},14.31);
-tl.fromTo("#cap8 .sel",{scaleX:.55,opacity:0},{scaleX:1,opacity:1,duration:.22,ease:"power3.out"},16.18);tl.to("#cap8 .sel",{opacity:0,duration:.25},16.88);
-tl.fromTo("#cap9 .sel",{scaleX:.55,opacity:0},{scaleX:1,opacity:1,duration:.22,ease:"power3.out"},17.31);tl.to("#cap9 .sel",{opacity:0,duration:.25},18.01);
-tl.fromTo("#cap10 .sel",{scaleX:.55,opacity:0},{scaleX:1,opacity:1,duration:.22,ease:"power3.out"},18.54);tl.to("#cap10 .sel",{opacity:0,duration:.25},19.24);
-
-tl.fromTo("#cap12 .sel",{scaleX:.55,opacity:0},{scaleX:1,opacity:1,duration:.22,ease:"power3.out"},21.57);tl.to("#cap12 .sel",{opacity:0,duration:.25},22.27);
-tl.fromTo("#cap13 .sel",{scaleX:.55,opacity:0},{scaleX:1,opacity:1,duration:.22,ease:"power3.out"},22.88);tl.to("#cap13 .sel",{opacity:0,duration:.25},23.58);
-tl.fromTo("#cap14 .sel",{scaleX:.55,opacity:0},{scaleX:1,opacity:1,duration:.22,ease:"power3.out"},23.64);tl.to("#cap14 .sel",{opacity:0,duration:.25},24.34);
-tl.fromTo("#cap15 .sel",{scaleX:.55,opacity:0},{scaleX:1,opacity:1,duration:.22,ease:"power3.out"},25.76);tl.to("#cap15 .sel",{opacity:0,duration:.25},26.46);
-
-tl.fromTo("#cap17 .sel",{scaleX:.55,opacity:0},{scaleX:1,opacity:1,duration:.22,ease:"power3.out"},28.21);tl.to("#cap17 .sel",{opacity:0,duration:.25},28.91);
-tl.fromTo("#cap18 .sel",{scaleX:.55,opacity:0},{scaleX:1,opacity:1,duration:.22,ease:"power3.out"},29.95);tl.to("#cap18 .sel",{opacity:0,duration:.25},30.65);
-tl.fromTo("#cap19 .sel",{scaleX:.55,opacity:0},{scaleX:1,opacity:1,duration:.22,ease:"power3.out"},31.96);tl.to("#cap19 .sel",{opacity:0,duration:.25},32.66);
-tl.fromTo("#cap20 .sel",{scaleX:.55,opacity:0},{scaleX:1,opacity:1,duration:.22,ease:"power3.out"},33.25);tl.to("#cap20 .sel",{opacity:0,duration:.25},33.95);
-tl.fromTo("#cap21 .sel",{scaleX:.55,opacity:0},{scaleX:1,opacity:1,duration:.22,ease:"power3.out"},34.03);tl.to("#cap21 .sel",{opacity:0,duration:.25},34.73);
-// blue whoosh + pop on each cut
-[1.9,6.5,12.0,16.0,19.6,21.9,25.8,29.6,31.9,33.25].forEach(t=>{tl.set("#whoosh",{x:-400,opacity:0},t-0.08);tl.to("#whoosh",{opacity:.8,x:0,duration:.1,ease:"power2.out"},t-0.06);tl.to("#whoosh",{opacity:0,x:400,duration:.22,ease:"power2.in"},t+0.05);});
+// S1
+fly("#s1m",1.5,0,-500,-6,[0,-14]);fly("#s1p",2.0,-600,0,-30,[30,0]);fly("#s1a",2.3,-300,-300,-40);fly("#s1b",2.5,300,-300,40);fly("#s1c",2.8,300,300,20);
+tl.from("#s1h1",{scaleX:0,duration:.8,ease:E},1.6);
+// S2
+fly("#s2h",6.6,0,500,8,[0,-12]);tl.from("#s2p",{y:300,opacity:0,duration:.5,ease:E},9.9);
+const pt="a cozy cafe poster, warm light, clean bold typography",po={n:0};
+tl.to(po,{n:pt.length,duration:1.4,ease:"none",onUpdate(){const k=Math.round(po.n);document.getElementById("s2type").textContent=pt.slice(0,k)+(k<pt.length?"▌":"");}},10.1);
+tl.from("#s2h1",{scaleX:0,duration:.8,ease:E},6.7);
+// S3
+fly("#s3a",12.1,-600,0,-8,[0,-10]);fly("#s3b",13.5,600,0,8);tl.from(["#s3l1"],{opacity:0,y:20,duration:.3},12.5);tl.from("#s3l2",{opacity:0,y:20,duration:.3},14.0);
+tl.to("#s3b",{xPercent:3,skewX:3,duration:.05,repeat:7,yoyo:true,ease:"steps(1)"},14.8);
+// S4
+tl.from("#s4a",{scale:.7,opacity:0,duration:.25,ease:B},16.18);tl.from("#s4b",{scale:.7,opacity:0,duration:.25,ease:B},17.31);tl.from("#s4c",{scale:.7,opacity:0,duration:.25,ease:B},18.54);
+tl.to("#s4g",{x:"+=10",skewX:-8,duration:.05,repeat:9,yoyo:true,ease:"steps(1)"},17.4);
+// S4b
+fly("#s4x1",20.85,-700,0,-14);fly("#s4x2",21.1,700,0,14);fly("#s4x3",21.4,0,400,30);
+// S5
+tl.from("#s5w",{y:90,opacity:0,filter:"blur(14px)",duration:.6,ease:E},22.88);tl.from("#s5s",{opacity:0,y:24,duration:.7,ease:E},23.4);tl.from("#s5l",{scaleX:0,duration:.6,ease:E},23.6);
+// S6
+tl.from(["#s6a","#s6b","#s6c","#s6d"],{y:300,opacity:0,rotate:5,duration:.45,ease:E,stagger:{amount:1.5}},25.9);
+tl.to(["#s6a","#s6c"],{yPercent:-3,duration:3.2,ease:"none"},25.9);tl.to(["#s6b","#s6d"],{yPercent:3,duration:3.2,ease:"none"},25.9);
+// S7
+const tm={v:20};tl.to(tm,{v:0,duration:1.8,ease:"power1.inOut",onUpdate(){document.getElementById("s7n").textContent="0:"+String(Math.ceil(tm.v)).padStart(2,"0");}},29.75);
+tl.to("#s7r",{strokeDashoffset:2073,duration:1.8,ease:"power1.inOut"},29.75);
+// S8
+tl.from("#s8f",{scale:2.4,opacity:0,duration:.3,ease:"power4.out"},31.96);tl.from("#s8l",{scaleX:0,duration:.35,ease:E},32.2);
+// S9
+tl.from("#s9b",{scale:.3,rotate:-20,opacity:0,duration:.45,ease:B},33.3);tl.from("#s9t",{opacity:0,y:30,duration:.3},33.6);
+// person windows: subtle push, no grade
+tl.fromTo("#p0",{scale:1},{scale:1.06,duration:1.4,ease:"none"},0);
+tl.fromTo("#p1",{scale:1.06},{scale:1,duration:1.2,ease:"none"},19.6);
+tl.fromTo("#p2",{scale:1},{scale:1.08,duration:1.4,ease:"none"},34.6);
 
 window.__timelines["main"] = tl;
 </script>
