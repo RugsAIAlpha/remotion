@@ -145,6 +145,40 @@ const files = {
   "hit.wav": hit(), "tick.wav": tick(true), "tock.wav": tick(false), "ding.wav": ding(), "alarm.wav": alarm(),
   "riser.wav": riser(), "crack.wav": crack(), "key.wav": typeKey(), "scan.wav": scan(), "cash.wav": cash(), "check.wav": check(),
 };
+
+// ---- extra collage-style effects -------------------------------------------------------------
+function tear(sec = 0.55) { // ripping paper: crackly band-passed noise
+  const o = buf(sec); let y = 0;
+  for (let i = 0; i < o.length; i++) {
+    const t = i / SR; const crackle = rnd() > 0.55 ? rnd() : rnd() * 0.15;
+    y += 0.5 * (crackle - y);
+    o[i] = (crackle - y) * 2 * Math.min(1, t / 0.02) * Math.exp(-t / 0.28) * (0.6 + 0.4 * Math.sin(t * 140));
+  }
+  return o;
+}
+function click() { const o = buf(0.06); for (let i = 0; i < o.length; i++) { const t = i / SR; o[i] = (Math.sin(2 * Math.PI * 1800 * t) * 0.5 + rnd() * 0.5) * env(t, 0.0003, 0.008); } return o; }
+function stamp() { // heavy press: low thump + short noise
+  const o = buf(0.5); let ph = 0;
+  for (let i = 0; i < o.length; i++) { const t = i / SR; ph += 2 * Math.PI * (70 + 80 * Math.exp(-t * 25)) / SR; o[i] = Math.sin(ph) * env(t, 0.002, 0.12) + rnd() * 0.5 * env(t, 0.0005, 0.03); }
+  return o;
+}
+function shutter() { // two quick mechanical clicks
+  const o = buf(0.28); const a = click(), b = click(); const off = Math.floor(0.09 * SR);
+  for (let i = 0; i < a.length; i++) { o[i] += a[i]; o[i + off] += b[i] * 0.8; }
+  return o;
+}
+function rustle(sec = 0.5) { const o = buf(sec); let y = 0; for (let i = 0; i < o.length; i++) { const t = i / SR; y += 0.25 * (rnd() - y); o[i] = y * Math.sin(Math.PI * t / sec) * (0.5 + 0.5 * rnd()); } return o; }
+function chime() { // notification: two soft bells
+  const a = ding(1568, 0.7), b = ding(2093, 0.9); const o = buf(0.9); const off = Math.floor(0.12 * SR);
+  for (let i = 0; i < o.length; i++) o[i] = a[i] * 0.7 + (i >= off ? b[i - off] : 0);
+  return o;
+}
+function slam() { // metallic slam: noise + inharmonic partials
+  const o = buf(0.9);
+  for (let i = 0; i < o.length; i++) { const t = i / SR; let v = 0; for (const f of [180, 247, 391, 633]) v += Math.sin(2 * Math.PI * f * t); o[i] = (v * 0.3 + rnd() * 0.6) * env(t, 0.001, 0.14); }
+  return o;
+}
+Object.assign(files, {"tear.wav": tear(), "click.wav": click(), "stamp.wav": stamp(), "shutter.wav": shutter(), "rustle.wav": rustle(), "chime.wav": chime(), "slam.wav": slam()});
 for (const [n, d] of Object.entries(files)) writeWav(n, d, n === "hit.wav" ? 1 : 0.85);
 writeWav("music.wav", music(30), 0.8);
 console.log("wrote", Object.keys(files).length + 1, "audio files to", OUT);

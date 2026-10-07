@@ -13,6 +13,9 @@ export const C = {
   red: "#D6362B",
   green: "#2FA866",
   cream: "#F6F0E4",
+  paper: "#F3EBDD",
+  kraft: "#D8BE95",
+  yellow: "#FFD23F",
   white: "#F6F0E4",
   ink: "#0A0F1E",
 };
