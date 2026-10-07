@@ -78,3 +78,20 @@ export const Reticle: React.FC<{x: number; y: number; w: number; h: number; at: 
   );
 };
 
+
+/** Full-screen cutaway "clip": warm paper backdrop that slides up over the talking-head shot. */
+export const Cut: React.FC<{from: number; to: number; children: React.ReactNode}> = ({from, to, children}) => {
+  const frame = useCurrentFrame();
+  const a = s2f(from);
+  const b = s2f(to);
+  if (frame < a || frame > b) return null;
+  const p = 1 - Math.pow(1 - clamp01((frame - a) / 7), 3);
+  const out = interpolate(frame, [b - 5, b], [1, 0], {extrapolateLeft: "clamp"});
+  return (
+    <div style={{position: "absolute", inset: 0, opacity: out, transform: `translateY(${(1 - p) * 100}%)`, overflow: "hidden", background: "#EDE5D3"}}>
+      <div style={{position: "absolute", inset: 0, backgroundImage: "linear-gradient(rgba(60,40,10,.07) 2px, transparent 2px), linear-gradient(90deg, rgba(60,40,10,.07) 2px, transparent 2px)", backgroundSize: "64px 64px"}} />
+      <div style={{position: "absolute", inset: 0, background: "radial-gradient(ellipse at 50% 45%, rgba(255,255,255,.55) 0%, rgba(120,90,40,.28) 100%)"}} />
+      {children}
+    </div>
+  );
+};

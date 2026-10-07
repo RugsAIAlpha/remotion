@@ -5,6 +5,11 @@ import {HardhatSvg} from "./graphics";
 import {BIG, C, FONT, FPS, s2f} from "./theme";
 import {clamp01, ease, usePop, useT} from "./util";
 
+/** Centres a scene (designed for a ~1080x700 zone) in the full-screen cutaway. */
+const Group: React.FC<{s?: number; children: React.ReactNode}> = ({s = 1.1, children}) => (
+  <div style={{position: "absolute", inset: 0, transform: `translateY(283px) scale(${s})`, transformOrigin: "540px 300px"}}>{children}</div>
+);
+
 /* ---------------------------------------------------------------- illustrations */
 const LaptopBriefcase: React.FC = () => (
   <svg width="360" height="300" viewBox="0 0 360 300">
@@ -73,22 +78,22 @@ const Hourglass: React.FC<{t: number}> = ({t}) => {
 };
 
 /* ------------------------------------------------------------------- scene 1 */
-export const SceneJob: React.FC<{to: number}> = ({to}) => {
-  const vs = usePop(1.0, 9, 220);
+export const SceneJob: React.FC<{from: number; to: number}> = ({from, to}) => {
+  const vs = usePop(from + 0.9, 9, 220);
   const frame = useCurrentFrame();
-  const show = frame >= s2f(1.0) && frame < s2f(to) - 6;
+  const show = frame >= s2f(from + 0.9) && frame < s2f(to) - 6;
   return (
-    <>
-      <Paper x={40} y={90} w={480} h={420} rot={-3} at={0.1} to={to} bg={C.kraft} seed={3} dir="l">
+    <Group>
+      <Paper x={40} y={90} w={480} h={420} rot={-3} at={from} to={to} bg={C.kraft} seed={3} dir="l">
         <div style={{display: "flex", height: "100%", alignItems: "center", justifyContent: "center"}}><LaptopBriefcase /></div>
       </Paper>
-      <Paper x={560} y={90} w={480} h={420} rot={3} at={0.1} to={to} bg={C.paper} seed={7} dir="r">
+      <Paper x={560} y={90} w={480} h={420} rot={3} at={from} to={to} bg={C.paper} seed={7} dir="r">
         <div style={{display: "flex", height: "100%", alignItems: "center", justifyContent: "center"}}><HardhatSvg size={330} color={C.orange} /></div>
       </Paper>
       {show ? <div style={{position: "absolute", left: 540 - 55, top: 300 - 55, width: 110, height: 110, borderRadius: "50%", background: C.yellow, border: "6px solid #0B0B0F", fontFamily: BIG, fontSize: 56, textAlign: "center", lineHeight: "98px", transform: `scale(${vs})`}}>VS</div> : null}
-      <Label y={560} at={0.2} to={to}>Job ya Business?</Label>
-      <Label y={660} at={1.9} to={to} bg={C.yellow} color="#0B0B0F" size={56} rot={-1.5}>Construction Project</Label>
-    </>
+      <Label y={560} at={from + 0.3} to={to}>Job ya Business?</Label>
+      <Label y={660} at={from + 1.0} to={to} bg={C.yellow} color="#0B0B0F" size={56} rot={-1.5}>Construction Project</Label>
+    </Group>
   );
 };
 
@@ -99,8 +104,8 @@ export const SceneError: React.FC<{from: number; to: number}> = ({from, to}) => 
   const my = 250 + Math.cos(t * 2.3) * 70;
   const red = clamp01((t - 0.7) / 0.9) * 0.62;
   return (
-    <>
-      <Paper x={70} y={90} w={940} h={450} rot={-2} at={from} to={to} bg="#1F4E9C" seed={11} dir="t" tape>
+    <Group s={1.07}>
+      <Paper x={70} y={90} w={940} h={450} rot={-2} at={from} to={to} bg="#2E2E33" seed={11} dir="t" tape>
         <div style={{position: "absolute", inset: 0, backgroundImage: "linear-gradient(rgba(255,255,255,.22) 2px, transparent 2px), linear-gradient(90deg, rgba(255,255,255,.22) 2px, transparent 2px)", backgroundSize: "44px 44px"}} />
         <div style={{position: "absolute", left: 260, top: 70}}><HouseBlueprint /></div>
         <Magnifier cx={mx} cy={my} />
@@ -108,7 +113,7 @@ export const SceneError: React.FC<{from: number; to: number}> = ({from, to}) => 
       </Paper>
       <Stamp x={540} y={330} at={from + 1.05} to={to} text="ERROR" />
       <Label y={600} at={from + 1.05} to={to} bg={C.yellow} color="#D6362B" size={78} rot={-1}>Expensive Mistakes</Label>
-    </>
+    </Group>
   );
 };
 
@@ -141,7 +146,7 @@ export const SceneTime: React.FC<{from: number; to: number}> = ({from, to}) => {
   const frame = useCurrentFrame();
   const off = -(frame % 40) * 1.2;
   return (
-    <>
+    <Group>
       <Clock3D from={from} to={to} />
       <Paper x={590} y={120} w={450} h={380} rot={3} at={from + 0.15} to={to} seed={5} dir="r">
         <div style={{display: "flex", height: "100%", alignItems: "center", justifyContent: "center"}}><SiteIllustration /></div>
@@ -153,7 +158,7 @@ export const SceneTime: React.FC<{from: number; to: number}> = ({from, to}) => {
       </svg>
       <Label y={575} at={from + 0.3} to={to} size={64}>Utna samay</Label>
       <Label y={670} at={from + 1.5} to={to} bg="#D6362B" size={74} rot={-1}>Nahi de paate</Label>
-    </>
+    </Group>
   );
 };
 
@@ -187,12 +192,14 @@ export const SceneCost: React.FC<{from: number; to: number}> = ({from, to}) => {
   const ext = Array.from({length: 10}).map((_, i) => `${i * 2}px ${i * 2}px 0 #0B0B0F`).join(",");
   return (
     <>
+      <Group>
       <div style={{position: "absolute", left: 0, right: 0, top: 70, display: "flex", justifyContent: "center", perspective: 900, opacity: out, transform: `scale(${p})`}}>
         <div style={{fontFamily: BIG, fontSize: 470, lineHeight: 1, color: C.yellow, textShadow: `${ext}, 0 30px 40px rgba(0,0,0,.5)`, transform: `rotateY(${Math.sin(t * 2.4) * 28}deg) rotateZ(${Math.sin(t * 1.7) * 4}deg)`}}>3X</div>
       </div>
-      <Bills from={from + 0.6} to={to} />
       <Reticle x={90} y={605} w={900} h={104} at={from + 0.8} to={to} />
       <Label y={610} at={from + 0.8} to={to} bg="#D6362B" size={72}>Cost 3X ho jaata hai!</Label>
+      </Group>
+      <Bills from={from + 0.4} to={to} />
     </>
   );
 };
@@ -202,7 +209,7 @@ export const SceneNoTime: React.FC<{from: number; to: number}> = ({from, to}) =>
   const frame = useCurrentFrame();
   const t = useT(from);
   return (
-    <>
+    <Group>
       <Paper x={320} y={90} w={440} h={450} rot={3} at={from} to={to} seed={9} dir="b" tape float={false}>
         <div style={{position: "absolute", inset: 14, background: "repeating-linear-gradient(-45deg,#FFD23F 0 26px,#111 26px 52px)", borderRadius: 6}} />
         <div style={{position: "absolute", inset: 38, background: C.paper, borderRadius: 4, display: "flex", alignItems: "center", justifyContent: "center", transform: `translateY(${Math.sin(frame / 14) * 6}px)`}}>
@@ -215,8 +222,8 @@ export const SceneNoTime: React.FC<{from: number; to: number}> = ({from, to}) =>
         </svg>
       </Paper>
       <Label y={575} at={from + 0.1} to={to} size={92}>Not Skill</Label>
-      <Label y={685} at={from + 1.4} to={to} bg={C.yellow} color="#0B0B0F" size={92} rot={-1}>Just No Time</Label>
-    </>
+      <Label y={685} at={from + 0.7} to={to} bg={C.yellow} color="#0B0B0F" size={92} rot={-1}>Just No Time</Label>
+    </Group>
   );
 };
 
@@ -228,8 +235,8 @@ export const SceneEyes: React.FC<{from: number; to: number}> = ({from, to}) => {
   const look = Math.sin(t * 2.2) * 18;
   const pulse = 0.55 + 0.45 * Math.sin(t * 9);
   return (
-    <>
-      <Paper x={60} y={90} w={960} h={450} rot={-1.5} at={from} to={to} bg="#1F4E9C" seed={13} dir="t" float={false}>
+    <Group s={1.07}>
+      <Paper x={60} y={90} w={960} h={450} rot={-1.5} at={from} to={to} bg="#2E2E33" seed={13} dir="t" float={false}>
         <div style={{position: "absolute", inset: 0, backgroundImage: "linear-gradient(rgba(255,255,255,.2) 2px, transparent 2px), linear-gradient(90deg, rgba(255,255,255,.2) 2px, transparent 2px)", backgroundSize: "44px 44px"}} />
         <svg width="960" height="450" viewBox="0 0 960 450" fill="none" strokeLinejoin="round" strokeLinecap="round">
           {/* building under inspection */}
@@ -258,39 +265,40 @@ export const SceneEyes: React.FC<{from: number; to: number}> = ({from, to}) => {
       </Paper>
       <Label y={575} at={from + 0.05} to={to} size={72}>Project Manager</Label>
       <Label y={672} at={from + 1.0} to={to} bg={C.yellow} color="#0B0B0F" size={64} rot={-1}>= Your Eyes on Site</Label>
-    </>
+    </Group>
   );
 };
 
 /* ------------------------------------------------------------------- scene 7 */
 const CURSOR = "M0 0 L0 34 L9 26 L16 42 L24 38 L17 23 L30 23 Z";
+/** Cutaway: an Instagram-style comment box where "MANAGE" is typed by a cursor. */
 export const SceneCTA: React.FC<{from: number; to: number}> = ({from, to}) => {
   const frame = useCurrentFrame();
   const t = frame / FPS;
-  const typeStart = 25.1;
+  const typeStart = from + 0.7;
   const typed = Math.max(0, Math.min(6, Math.floor((t - typeStart) / 0.1) + 1));
   const text = "MANAGE".slice(0, typed);
-  const posted = t >= 26.0;
-  // cursor path: enters, clicks the field, then moves to Post
-  const cx = interpolate(t, [23.4, 24.6, 25.9, 26.1], [980, 520, 520, 890], {extrapolateLeft: "clamp", extrapolateRight: "clamp", easing: ease});
-  const cy = interpolate(t, [23.4, 24.6, 25.9, 26.1], [480, 330, 330, 330], {extrapolateLeft: "clamp", extrapolateRight: "clamp", easing: ease});
-  const click = Math.abs(t - 24.65) < 0.06 || Math.abs(t - 26.12) < 0.06;
-  const badge = usePop(26.7, 8, 240);
+  const postAt = from + 1.55;
+  const posted = t >= postAt;
+  const tm = [from + 0.1, from + 0.55, from + 1.35, from + 1.5];
+  const cx = interpolate(t, tm, [980, 520, 520, 890], {extrapolateLeft: "clamp", extrapolateRight: "clamp", easing: ease});
+  const cy = interpolate(t, tm, [480, 330, 330, 330], {extrapolateLeft: "clamp", extrapolateRight: "clamp", easing: ease});
+  const click = Math.abs(t - (from + 0.6)) < 0.06 || Math.abs(t - (postAt - 0.05)) < 0.06;
   return (
-    <>
-      <Paper x={70} y={110} w={940} h={420} rot={-1} at={23.2} to={to} bg="#FFFFFF" seed={17} dir="t" float={false}>
+    <Group>
+      <Paper x={70} y={110} w={940} h={420} rot={-1} at={from} to={to} bg="#FFFFFF" seed={17} dir="t" float={false}>
         <div style={{padding: "26px 34px", fontFamily: FONT}}>
           <div style={{fontWeight: 800, fontSize: 34, color: "#111"}}>Comments</div>
           <div style={{display: "flex", alignItems: "center", gap: 18, marginTop: 24}}>
             <div style={{width: 74, height: 74, borderRadius: "50%", background: C.orange}} />
-            <div style={{flex: 1, height: 74, borderRadius: 40, border: `4px solid ${typed > 0 || t > 24.6 ? C.orange : "#C9CED8"}`, display: "flex", alignItems: "center", padding: "0 28px", fontWeight: 800, fontSize: 40, color: "#111"}}>
-              {text || (t < 24.6 ? <span style={{color: "#9AA3B5", fontWeight: 600}}>Add a comment…</span> : null)}
-              {!posted && t > 24.6 ? <span style={{display: "inline-block", width: 4, height: 44, background: "#111", marginLeft: 4, opacity: Math.floor(t * 2.5) % 2 ? 0 : 1}} /> : null}
+            <div style={{flex: 1, height: 74, borderRadius: 40, border: `4px solid ${typed > 0 || t > from + 0.6 ? C.orange : "#C9CED8"}`, display: "flex", alignItems: "center", padding: "0 28px", fontWeight: 800, fontSize: 40, color: "#111"}}>
+              {text || (t < from + 0.6 ? <span style={{color: "#9AA3B5", fontWeight: 600}}>Add a comment…</span> : null)}
+              {!posted && t > from + 0.6 ? <span style={{display: "inline-block", width: 4, height: 44, background: "#111", marginLeft: 4, opacity: Math.floor(t * 2.5) % 2 ? 0 : 1}} /> : null}
             </div>
-            <div style={{padding: "16px 30px", borderRadius: 40, background: typed ? C.orange : "#C9CED8", color: "#fff", fontWeight: 800, fontSize: 34, transform: click && t > 26 ? "scale(.92)" : "none"}}>Post</div>
+            <div style={{padding: "16px 30px", borderRadius: 40, background: typed ? C.orange : "#C9CED8", color: "#fff", fontWeight: 800, fontSize: 34}}>Post</div>
           </div>
           {posted ? (
-            <div style={{display: "flex", alignItems: "center", gap: 18, marginTop: 34, opacity: clamp01((t - 26.0) / 0.2), transform: `translateY(${(1 - clamp01((t - 26.0) / 0.2)) * 20}px)`}}>
+            <div style={{display: "flex", alignItems: "center", gap: 18, marginTop: 34, opacity: clamp01((t - postAt) / 0.2), transform: `translateY(${(1 - clamp01((t - postAt) / 0.2)) * 20}px)`}}>
               <div style={{width: 74, height: 74, borderRadius: "50%", background: C.orange}} />
               <div style={{fontSize: 44, fontWeight: 800, color: "#111"}}>MANAGE <span style={{fontSize: 28, color: "#9AA3B5", fontWeight: 600}}>· just now</span></div>
             </div>
@@ -300,13 +308,24 @@ export const SceneCTA: React.FC<{from: number; to: number}> = ({from, to}) => {
           <g transform={`translate(${cx - 70} ${cy - 110}) scale(${click ? 0.85 : 1})`}><path d={CURSOR} fill="#111" stroke="#fff" strokeWidth="3" strokeLinejoin="round" /></g>
         </svg>
       </Paper>
-      <Label y={575} at={24.4} to={to} size={72}>
+      <Label y={575} at={from + 0.1} to={to} size={72}>
         Comment <span style={{color: C.yellow}}>'MANAGE'</span>
         <span style={{display: "inline-block", width: 8, height: "0.8em", background: C.yellow, marginLeft: 12, verticalAlign: "-0.08em", opacity: Math.floor(t * 2) % 2 ? 0 : 1}} />
       </Label>
-      <Label y={675} at={26.3} to={to} bg={C.yellow} color="#0B0B0F" size={64} rot={-1}>Check your DM</Label>
-      {t > 26.7 ? (
-        <div style={{position: "absolute", left: 850, top: 790, transform: `scale(${badge * 0.85})`}}>
+    </Group>
+  );
+};
+
+/** Back on the speaker: short CTA labels ABOVE his head (never over it) + DM badge beside it. */
+export const EndCTA: React.FC<{at: number; to: number}> = ({at, to}) => {
+  const badge = usePop(at + 0.2, 8, 240);
+  const frame = useCurrentFrame();
+  return (
+    <>
+      <Label y={350} at={at} to={to} size={70}>Comment <span style={{color: C.yellow}}>'MANAGE'</span></Label>
+      <Label y={455} at={at + 0.3} to={to} bg={C.yellow} color="#0B0B0F" size={64} rot={-1}>Check your DM</Label>
+      {frame >= s2f(at + 0.2) ? (
+        <div style={{position: "absolute", left: 860, top: 800, transform: `scale(${badge * 0.8})`}}>
           <div style={{width: 170, height: 170, borderRadius: 46, background: C.orange, border: "6px solid #fff", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 18px 30px rgba(0,0,0,.45)"}}>
             <svg width="96" height="96" viewBox="0 0 100 100"><path d="M92 10 L8 44 L40 56 L52 90 Z" fill="#fff" /><path d="M92 10 L40 56" stroke={C.orange} strokeWidth="5" strokeLinecap="round" /></svg>
           </div>
@@ -316,4 +335,3 @@ export const SceneCTA: React.FC<{from: number; to: number}> = ({from, to}) => {
     </>
   );
 };
-
