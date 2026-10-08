@@ -161,7 +161,6 @@ html,body{width:${W}px;height:${H}px;overflow:hidden;background:#000;font-family
 
   <div id="wipe" class="clip" data-start="0" data-duration="${DUR}" data-track-index="10"></div>
   ${pcapHtml}
-  ${matteHtml}
 </div>
 <script>
 const tl = gsap.timeline({ paused: true });
