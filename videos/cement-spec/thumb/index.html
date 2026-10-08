@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en"><head><meta charset="UTF-8"/><title>Cement Spec Thumbnail</title>
+<style>
+@font-face{font-family:"Anton";src:url("../assets/fonts/anton-latin-400-normal.woff2") format("woff2")}
+@font-face{font-family:"JetBrains Mono";src:url("../assets/fonts/jetbrains-mono-latin-600-normal.woff2") format("woff2");font-weight:600}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1080px;height:1920px;overflow:hidden;background:#2a0a07}
+#t{position:relative;width:1080px;height:1920px;overflow:hidden;font-family:Inter,Arial,sans-serif;
+  background:linear-gradient(180deg,rgba(30,6,3,.88) 0%,rgba(110,28,16,.62) 45%,rgba(30,6,3,.92) 100%),url("crack.jpg") center/cover}
+.abs{position:absolute}
+.glow{left:90px;top:900px;width:900px;height:900px;border-radius:50%;background:radial-gradient(circle,rgba(255,110,70,.85),rgba(255,90,60,0) 66%)}
+.person{left:-110px;top:960px;width:1300px;height:1083px;filter:drop-shadow(0 0 0 #fff) drop-shadow(0 30px 50px rgba(0,0,0,.55))}
+.h{font-family:Anton,Impact,sans-serif;line-height:.92;letter-spacing:.005em;text-transform:uppercase}
+.capsule{position:absolute;width:170px;height:68px;border-radius:34px;background:linear-gradient(180deg,#ff7a5c,#ff4a2a);box-shadow:0 18px 26px rgba(255,90,60,.4),inset 0 -8px 12px rgba(160,30,10,.35)}
+.spark{position:absolute;font-weight:300;color:#ff7a5c;line-height:1}
+.chip{position:absolute;border-radius:99px;font-weight:900;color:#fff;white-space:nowrap}
+</style></head><body>
+<div id="t">
+  <div class="abs" style="left:60px;top:150px;font-family:'JetBrains Mono',monospace;font-weight:600;font-size:34px;letter-spacing:.22em;color:#ffd0c4">CONSTRUCTION · SPEC SHEET</div>
+
+  <div class="abs h" style="left:56px;top:225px;font-size:310px;color:#fff;text-shadow:0 10px 0 rgba(0,0,0,.35)">GALAT</div>
+  <div class="abs h" style="left:56px;top:500px;font-size:310px;color:#ff5a3c;text-shadow:0 10px 0 rgba(0,0,0,.35)">CEMENT?</div>
+
+  <div class="chip" style="left:60px;top:850px;padding:16px 40px;font-size:58px;background:rgba(255,255,255,.12);border:4px solid rgba(255,255,255,.55);text-decoration:line-through;text-decoration-color:#ff5a3c;text-decoration-thickness:7px">15 din</div>
+  <div class="abs" style="left:350px;top:842px;font-weight:900;font-size:74px;color:#ffd0c4">→</div>
+  <div class="chip" style="left:450px;top:832px;padding:18px 48px;font-size:78px;background:#ff5a3c;box-shadow:0 18px 40px rgba(255,90,60,.5)">15 SAAL</div>
+
+  <div class="abs glow"></div>
+  <img class="abs person" src="person.png"/>
+
+  <div class="chip" style="left:150px;top:1700px;width:780px;height:124px;display:flex;align-items:center;justify-content:center;font-size:54px;letter-spacing:.03em;background:#ffe9a8;color:#2a0a07;box-shadow:0 20px 44px rgba(0,0,0,.5)">DM “SPEC” ↗</div>
+
+  <i class="capsule" style="left:790px;top:120px;transform:rotate(24deg)"></i>
+  <i class="capsule" style="left:-40px;top:1500px;transform:rotate(-22deg)"></i>
+  <i class="capsule" style="left:880px;top:1380px;transform:rotate(30deg) scale(.8)"></i>
+  <i class="spark" style="left:930px;top:1010px;font-size:90px">+</i>
+  <i class="spark" style="left:40px;top:1160px;font-size:70px">+</i>
+</div></body></html>
