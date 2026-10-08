@@ -16,9 +16,13 @@ const PCAPS = [
   [24.1, 25.9, "isiliye *construction* shuru hone se pehle"],
   [31.0, 33.1, "aur main aapko ek basic *checklist* bhejoonga"],
 ];
-const mono = t => t.replace(/\*(.+?)\*/g, '<b>$1</b>');
-const pcapHtml = PCAPS.map((c, i) =>
-  `<div id="pc${i}" class="clip pcap" data-start="${c[0]}" data-duration="${(c[1] - c[0] + 0.2).toFixed(2)}" data-track-index="9">${mono(c[2])}</div>`).join("\n  ");
+const toks = t => { let acc=false; return t.split(" ").map(w=>{let a=acc;if(w.startsWith("*")){acc=true;a=true;w=w.slice(1);} if(/\*[,.!?]?$/.test(w)){acc=false;w=w.replace("*","");} return a?`<b>${w}</b>`:w;}); };
+const pcapHtml = PCAPS.map((c, i) => {
+  const w = toks(c[2]); const h = Math.ceil(w.length / 2);
+  return `<div id="pc${i}" class="clip pcap" data-start="${c[0]}" data-duration="${(c[1] - c[0] + 0.2).toFixed(2)}" data-track-index="9"><div class="pl">${w.slice(0, h).join(" ")}</div><div class="pr">${w.slice(h).join(" ")}</div></div>`;
+}).join("\n  ");
+const matteHtml = PERSON.map((p, i) =>
+  `<video id="pm${i}" class="clip pm" src="assets/matte${i}.webm" data-start="${p[0]}" data-duration="${p[1]}" data-media-start="0" data-track-index="9" muted playsinline></video>`).join("\n  ");
 const personHtml = PERSON.map((p, i) =>
   `<video id="p${i}" class="clip person" src="assets/talk.mp4" data-start="${p[0]}" data-duration="${p[1]}" data-media-start="${p[0]}" data-track-index="1" muted playsinline></video>`).join("\n  ");
 
@@ -47,8 +51,11 @@ html,body{width:${W}px;height:${H}px;overflow:hidden;background:#000;font-family
 .cream{background:radial-gradient(900px 900px at 30% 10%,#fff,rgba(255,255,255,0) 70%),var(--cream)}
 .reddark{background:radial-gradient(1000px 1000px at 50% 40%,#8a2314,#2a0a07 75%)}
 .abs{position:absolute}
-.pcap{left:60px;width:960px;top:120px;text-align:center;font-family:"JetBrains Mono",monospace;font-weight:400;font-size:50px;line-height:1.3;color:#fff;text-shadow:0 2px 14px rgba(0,0,0,.8),0 0 3px rgba(0,0,0,.5);z-index:50}
-.pcap b{font-weight:600;color:#ff8f72;text-shadow:0 2px 14px rgba(0,0,0,.85),0 0 3px rgba(0,0,0,.6)}
+.pcap{left:0;top:540px;width:${W}px;height:420px;font-family:"JetBrains Mono",monospace;font-weight:600;font-size:52px;line-height:1.22;color:#fff;text-shadow:0 3px 18px rgba(0,0,0,.55);z-index:5}
+.pcap .pl{position:absolute;left:28px;width:320px;top:0;text-align:right}
+.pcap .pr{position:absolute;left:732px;width:320px;top:0;text-align:left}
+.pcap b{font-weight:600;color:#ff8f72}
+.pm{left:0;top:0;width:${W}px;height:${H}px;object-fit:cover;z-index:6}
 .capsule{position:absolute;width:150px;height:60px;border-radius:30px;background:linear-gradient(180deg,#ff7a5c,#ff4a2a);box-shadow:0 18px 26px rgba(255,90,60,.35),inset 0 -8px 12px rgba(160,30,10,.35)}
 .dot{position:absolute;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ff8a70,#ff4a2a)}
 .spark{position:absolute;font-weight:300;color:var(--coral);line-height:1}
@@ -88,8 +95,8 @@ html,body{width:${W}px;height:${H}px;overflow:hidden;background:#000;font-family
   </section>
   <video id="m2" class="clip mframe" src="assets/shop.mp4" data-start="7.6" data-duration="3.3" data-media-start="0" data-track-index="3" muted playsinline style="left:80px;top:640px;width:920px;height:760px;border-radius:40px;object-fit:cover"></video>
   <section id="c2o" class="clip scene" data-start="7.6" data-duration="3.3" data-track-index="4" style="pointer-events:none">
-    <div id="c2r1" class="abs chip k" style="left:120px;top:1290px;font-size:36px;padding:14px 34px">jo dukan mein mila</div>
-    <div id="c2r2" class="abs chip" style="left:470px;top:1290px;font-size:34px;padding:14px 30px">structure ko chahiye?</div>
+    <div id="c2r1" class="abs chip k" style="left:120px;top:1200px;font-size:36px;padding:14px 34px">jo dukan mein mila</div>
+    <div id="c2r2" class="abs chip" style="left:120px;top:1290px;font-size:36px;padding:14px 34px">structure ko chahiye?</div>
   </section>
 
   <!-- C3 10.9–14.7 foundation -> compound wall (ref clip) -->
@@ -114,11 +121,15 @@ html,body{width:${W}px;height:${H}px;overflow:hidden;background:#000;font-family
     ${deco("c4", [["cap", 780, 1450, -20, 1], ["spark", 900, 600, 0, 64], ["dot", 80, 1300, 0, 36]])}
   </section>
 
-  <!-- C5a 18.9–20.8 savings -->
+  <!-- C5a 18.9–20.8 savings (dollars clip, screen-blended) -->
   <section id="c5" class="clip scene reddark" data-start="18.9" data-duration="1.9" data-track-index="2">
-    <div id="c5a" class="abs" style="left:0;top:700px;width:${W}px;text-align:center;font-weight:800;font-size:116px;color:#fff;line-height:1.05">kuch hazaar ₹<br>bachaye</div>
     ${deco("c5", [["cap", 40, 120, -20, 1], ["spark", 920, 250, 0, 66]])}
   </section>
+  <video id="m6" class="clip mfull" src="assets/dollars.mp4" data-start="18.9" data-duration="1.9" data-media-start="1.2" data-track-index="3" muted playsinline style="mix-blend-mode:screen"></video>
+  <section id="c5t" class="clip scene" data-start="18.9" data-duration="1.9" data-track-index="4" style="pointer-events:none">
+    <div id="c5a" class="abs" style="left:0;top:760px;width:${W}px;text-align:center;font-weight:900;font-size:128px;color:#fff;line-height:1.05;text-shadow:0 8px 34px rgba(0,0,0,.7)">kuch hazaar ₹<br>bachaye</div>
+  </section>
+
   <!-- C5b 20.8–22.6 cracking wall (ref clip) -->
   <video id="m5" class="clip mfull" src="assets/crack.mp4" data-start="20.8" data-duration="1.8" data-media-start="1.0" data-playback-rate="1.55" data-track-index="2" muted playsinline></video>
   <section id="c5x" class="clip scene" data-start="20.8" data-duration="1.8" data-track-index="3" style="background:linear-gradient(180deg,rgba(26,5,2,.55),rgba(26,5,2,0) 40%,rgba(26,5,2,.0) 55%,rgba(26,5,2,.85))">
@@ -150,6 +161,7 @@ html,body{width:${W}px;height:${H}px;overflow:hidden;background:#000;font-family
 
   <div id="wipe" class="clip" data-start="0" data-duration="${DUR}" data-track-index="10"></div>
   ${pcapHtml}
+  ${matteHtml}
 </div>
 <script>
 const tl = gsap.timeline({ paused: true });

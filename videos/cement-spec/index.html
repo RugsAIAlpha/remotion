@@ -16,8 +16,11 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:#000;font-family
 .cream{background:radial-gradient(900px 900px at 30% 10%,#fff,rgba(255,255,255,0) 70%),var(--cream)}
 .reddark{background:radial-gradient(1000px 1000px at 50% 40%,#8a2314,#2a0a07 75%)}
 .abs{position:absolute}
-.pcap{left:60px;width:960px;top:120px;text-align:center;font-family:"JetBrains Mono",monospace;font-weight:400;font-size:50px;line-height:1.3;color:#fff;text-shadow:0 2px 14px rgba(0,0,0,.8),0 0 3px rgba(0,0,0,.5);z-index:50}
-.pcap b{font-weight:600;color:#ff8f72;text-shadow:0 2px 14px rgba(0,0,0,.85),0 0 3px rgba(0,0,0,.6)}
+.pcap{left:0;top:540px;width:1080px;height:420px;font-family:"JetBrains Mono",monospace;font-weight:600;font-size:52px;line-height:1.22;color:#fff;text-shadow:0 3px 18px rgba(0,0,0,.55);z-index:5}
+.pcap .pl{position:absolute;left:28px;width:320px;top:0;text-align:right}
+.pcap .pr{position:absolute;left:732px;width:320px;top:0;text-align:left}
+.pcap b{font-weight:600;color:#ff8f72}
+.pm{left:0;top:0;width:1080px;height:1920px;object-fit:cover;z-index:6}
 .capsule{position:absolute;width:150px;height:60px;border-radius:30px;background:linear-gradient(180deg,#ff7a5c,#ff4a2a);box-shadow:0 18px 26px rgba(255,90,60,.35),inset 0 -8px 12px rgba(160,30,10,.35)}
 .dot{position:absolute;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ff8a70,#ff4a2a)}
 .spark{position:absolute;font-weight:300;color:var(--coral);line-height:1}
@@ -61,8 +64,8 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:#000;font-family
   </section>
   <video id="m2" class="clip mframe" src="assets/shop.mp4" data-start="7.6" data-duration="3.3" data-media-start="0" data-track-index="3" muted playsinline style="left:80px;top:640px;width:920px;height:760px;border-radius:40px;object-fit:cover"></video>
   <section id="c2o" class="clip scene" data-start="7.6" data-duration="3.3" data-track-index="4" style="pointer-events:none">
-    <div id="c2r1" class="abs chip k" style="left:120px;top:1290px;font-size:36px;padding:14px 34px">jo dukan mein mila</div>
-    <div id="c2r2" class="abs chip" style="left:470px;top:1290px;font-size:34px;padding:14px 30px">structure ko chahiye?</div>
+    <div id="c2r1" class="abs chip k" style="left:120px;top:1200px;font-size:36px;padding:14px 34px">jo dukan mein mila</div>
+    <div id="c2r2" class="abs chip" style="left:120px;top:1290px;font-size:36px;padding:14px 34px">structure ko chahiye?</div>
   </section>
 
   <!-- C3 10.9–14.7 foundation -> compound wall (ref clip) -->
@@ -87,11 +90,15 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:#000;font-family
     <i id="c4c0" class="capsule" style="left:780px;top:1450px;transform:rotate(-20deg) scale(1)"></i><i id="c4s1" class="spark" style="left:900px;top:600px;font-size:64px">+</i><i id="c4d2" class="dot" style="left:80px;top:1300px;width:36px;height:36px"></i>
   </section>
 
-  <!-- C5a 18.9–20.8 savings -->
+  <!-- C5a 18.9–20.8 savings (dollars clip, screen-blended) -->
   <section id="c5" class="clip scene reddark" data-start="18.9" data-duration="1.9" data-track-index="2">
-    <div id="c5a" class="abs" style="left:0;top:700px;width:1080px;text-align:center;font-weight:800;font-size:116px;color:#fff;line-height:1.05">kuch hazaar ₹<br>bachaye</div>
     <i id="c5c0" class="capsule" style="left:40px;top:120px;transform:rotate(-20deg) scale(1)"></i><i id="c5s1" class="spark" style="left:920px;top:250px;font-size:66px">+</i>
   </section>
+  <video id="m6" class="clip mfull" src="assets/dollars.mp4" data-start="18.9" data-duration="1.9" data-media-start="1.2" data-track-index="3" muted playsinline style="mix-blend-mode:screen"></video>
+  <section id="c5t" class="clip scene" data-start="18.9" data-duration="1.9" data-track-index="4" style="pointer-events:none">
+    <div id="c5a" class="abs" style="left:0;top:760px;width:1080px;text-align:center;font-weight:900;font-size:128px;color:#fff;line-height:1.05;text-shadow:0 8px 34px rgba(0,0,0,.7)">kuch hazaar ₹<br>bachaye</div>
+  </section>
+
   <!-- C5b 20.8–22.6 cracking wall (ref clip) -->
   <video id="m5" class="clip mfull" src="assets/crack.mp4" data-start="20.8" data-duration="1.8" data-media-start="1.0" data-playback-rate="1.55" data-track-index="2" muted playsinline></video>
   <section id="c5x" class="clip scene" data-start="20.8" data-duration="1.8" data-track-index="3" style="background:linear-gradient(180deg,rgba(26,5,2,.55),rgba(26,5,2,0) 40%,rgba(26,5,2,.0) 55%,rgba(26,5,2,.85))">
@@ -122,13 +129,18 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:#000;font-family
   <div id="cta" class="clip" data-start="31.0" data-duration="2.5" data-track-index="8" style="left:150px;top:1560px;width:780px;height:120px;border-radius:60px;background:var(--coral);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:56px;color:#fff;letter-spacing:.04em;z-index:40;box-shadow:0 20px 40px rgba(255,90,60,.4)">DM “SPEC” ↗</div>
 
   <div id="wipe" class="clip" data-start="0" data-duration="33.5" data-track-index="10"></div>
-  <div id="pc0" class="clip pcap" data-start="0" data-duration="1.87" data-track-index="9">galat grade ka <b>cement</b> use hone se</div>
-  <div id="pc1" class="clip pcap" data-start="1.96" data-duration="0.86" data-track-index="9">aapka <b>ghar</b></div>
-  <div id="pc2" class="clip pcap" data-start="5.69" data-duration="2.10" data-track-index="9">zyadatar <b>contractor</b> wahi cement lagaate hain</div>
-  <div id="pc3" class="clip pcap" data-start="14.85" data-duration="1.97" data-track-index="9">par agar koi <b>specify</b> hi nahi kar raha toh</div>
-  <div id="pc4" class="clip pcap" data-start="22.61" data-duration="1.25" data-track-index="9">yeh maine <b>khud dekha</b> hai</div>
-  <div id="pc5" class="clip pcap" data-start="24.1" data-duration="2.00" data-track-index="9">isiliye <b>construction</b> shuru hone se pehle</div>
-  <div id="pc6" class="clip pcap" data-start="31" data-duration="2.30" data-track-index="9">aur main aapko ek basic <b>checklist</b> bhejoonga</div>
+  <div id="pc0" class="clip pcap" data-start="0" data-duration="1.87" data-track-index="9"><div class="pl">galat grade ka <b>cement</b></div><div class="pr">use hone se</div></div>
+  <div id="pc1" class="clip pcap" data-start="1.96" data-duration="0.86" data-track-index="9"><div class="pl">aapka</div><div class="pr"><b>ghar</b></div></div>
+  <div id="pc2" class="clip pcap" data-start="5.69" data-duration="2.10" data-track-index="9"><div class="pl">zyadatar <b>contractor</b> wahi</div><div class="pr">cement lagaate hain</div></div>
+  <div id="pc3" class="clip pcap" data-start="14.85" data-duration="1.97" data-track-index="9"><div class="pl">par agar koi <b>specify</b> hi</div><div class="pr">nahi kar raha toh</div></div>
+  <div id="pc4" class="clip pcap" data-start="22.61" data-duration="1.25" data-track-index="9"><div class="pl">yeh maine <b>khud</b></div><div class="pr"><b>dekha</b> hai</div></div>
+  <div id="pc5" class="clip pcap" data-start="24.1" data-duration="2.00" data-track-index="9"><div class="pl">isiliye <b>construction</b> shuru</div><div class="pr">hone se pehle</div></div>
+  <div id="pc6" class="clip pcap" data-start="31" data-duration="2.30" data-track-index="9"><div class="pl">aur main aapko ek</div><div class="pr">basic <b>checklist</b> bhejoonga</div></div>
+  <video id="pm0" class="clip pm" src="assets/matte0.webm" data-start="0" data-duration="2.82" data-media-start="0" data-track-index="9" muted playsinline></video>
+  <video id="pm1" class="clip pm" src="assets/matte1.webm" data-start="5.6" data-duration="2" data-media-start="0" data-track-index="9" muted playsinline></video>
+  <video id="pm2" class="clip pm" src="assets/matte2.webm" data-start="14.7" data-duration="2" data-media-start="0" data-track-index="9" muted playsinline></video>
+  <video id="pm3" class="clip pm" src="assets/matte3.webm" data-start="22.6" data-duration="3.4" data-media-start="0" data-track-index="9" muted playsinline></video>
+  <video id="pm4" class="clip pm" src="assets/matte4.webm" data-start="31" data-duration="2.5" data-media-start="0" data-track-index="9" muted playsinline></video>
 </div>
 <script>
 const tl = gsap.timeline({ paused: true });
